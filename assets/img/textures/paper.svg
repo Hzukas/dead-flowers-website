@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
+<filter id="speck" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 .34  0 0 0 0 .24  0 0 0 0 .12  1.6 0 0 0 -.78"/>
+  </filter>
+  <filter id="blot" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="3" stitchTiles="stitch" seed="7"/>
+    <feColorMatrix values="0 0 0 0 .55  0 0 0 0 .38  0 0 0 0 .16  .9 0 0 0 -.38"/>
+  </filter>
+  <filter id="fiber" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".004 .35" numOctaves="2" stitchTiles="stitch" seed="3"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.2 0 0 0 -.62"/>
+  </filter>
+  <rect width="320" height="320" filter="url(#blot)"/>
+  <rect width="320" height="320" filter="url(#fiber)"/>
+  <rect width="320" height="320" filter="url(#speck)"/>
+</svg>

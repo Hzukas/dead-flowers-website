@@ -676,3 +676,140 @@ textarea { min-height: 140px; resize: vertical; }
   .admin-item { grid-template-columns: 56px 1fr; }
   .admin-item .actions, .admin-item > .check { grid-column: 2; }
 }
+
+/* ==========================================================================
+   Custom frames and textures
+   The SVGs live in assets/img/frames and assets/img/textures.
+   Regenerate them with: node tools/make-assets.js (or edit the SVGs directly).
+   ========================================================================== */
+
+/* ---------- Film grain over the whole site ---------- */
+body { position: relative; }
+body::after {
+  content: ""; position: absolute; inset: 0; z-index: 70; pointer-events: none;
+  background: url(../img/textures/grain.svg) 0 0 / 240px 240px;
+  opacity: .5; mix-blend-mode: overlay;
+}
+
+/* ---------- Hot rod pinstripe frames on cards ---------- */
+.shop-card, .tile, .pillar, .card, .visit, .modal, .faq, .map-slot { position: relative; }
+.shop-card::after, .tile::after, .pillar::after, .card::after, .visit::after, .modal::after, .faq::after, .map-slot::after {
+  content: ""; position: absolute; inset: 7px; pointer-events: none;
+  border: 48px solid transparent;
+  border-image: url(../img/frames/pinstripe-orange.svg) 48 / 48px stretch;
+  opacity: .9;
+}
+.pin-yellow::after { border-image-source: url(../img/frames/pinstripe-yellow.svg); }
+.pin-pink::after { border-image-source: url(../img/frames/pinstripe-pink.svg); }
+.pin-green::after, .shop-card.med::after { border-image-source: url(../img/frames/pinstripe-green.svg); }
+.map-slot { border: 1px solid var(--line); }
+.pin-cream::after, .faq::after, .map-slot::after { border-image-source: url(../img/frames/pinstripe-cream.svg); opacity: .45; }
+.modal::after { inset: 20px 7px 7px; }
+.card, .pillar, .tile { padding: 32px; }
+.shop-card { padding: 34px; }
+.visit { padding: 34px; }
+.faq { background: var(--panel); border-radius: 6px; padding: 14px clamp(24px, 4vw, 48px) 18px; }
+.faq details:last-child { border-bottom: 0; }
+
+/* ---------- Inner page header: sunburst with a wavy 70s stripe underneath ---------- */
+.page-head {
+  position: relative; border-bottom: 0;
+  padding-bottom: calc(clamp(32px, 5vw, 56px) + 30px);
+  background:
+    url(../img/textures/sunburst.svg) center bottom / max(1400px, 110%) auto no-repeat,
+    linear-gradient(180deg, rgba(122, 75, 220, .14), transparent);
+}
+.page-head::after, .exclusive::before, .exclusive::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 30px;
+  background: url(../img/textures/wave-stripes.svg) 0 0 / 160px 30px repeat-x;
+}
+.page-head::after { bottom: 0; }
+
+/* ---------- Home: exclusives band ---------- */
+.exclusive {
+  position: relative; border-block: 0;
+  padding-block: calc(clamp(56px, 8vw, 96px) + 30px);
+  background:
+    url(../img/textures/sunburst.svg) center bottom / max(1600px, 120%) auto no-repeat,
+    linear-gradient(120deg, #2a1645, #14090f 65%);
+}
+.exclusive::before { top: 0; }
+.exclusive::after { bottom: 0; transform: scaleY(-1); }
+
+/* ---------- Events as concert ticket stubs ---------- */
+.events { --stub: 120px; display: grid; gap: 22px; }
+.event {
+  position: relative; grid-template-columns: var(--stub) 1fr; gap: 0; padding: 0;
+  background: var(--panel); border-bottom: 0; border-radius: 6px;
+}
+.event::before, .event::after {
+  content: ""; position: absolute; left: var(--stub); width: 24px; height: 24px; margin-left: -12px;
+  border-radius: 50%; background: var(--bg);
+}
+.event::before { top: -12px; }
+.event::after { bottom: -12px; }
+.event-date {
+  align-self: stretch; display: grid; align-content: center;
+  padding: 20px 8px; border: 0; border-right: 2px dashed rgba(13, 10, 9, .6); border-radius: 6px 0 0 6px;
+  background: var(--c, var(--orange)) url(../img/textures/paper.svg); background-blend-mode: multiply;
+  color: var(--ink);
+}
+.event-date .m, .event-date .w { color: var(--ink); font-weight: 700; }
+.event > div:last-child { padding: 24px 28px 26px; }
+
+/* ---------- About: photos in 35mm film strip frames ---------- */
+.gallery > * {
+  border-style: solid; border-color: transparent; border-width: 14px 8px; border-radius: 0;
+  border-image: url(../img/frames/filmstrip.svg) 14 8 round;
+}
+
+/* ---------- Merch: catalog sheet with hex-nut border, aged paper, coffee ring ---------- */
+.catalog {
+  border: clamp(24px, 3.4vw, 40px) solid transparent; border-radius: 0;
+  border-image: url(../img/frames/catalog-frame.svg) 40 / 1 stretch;
+  background-color: var(--paper);
+  background-image:
+    url(../img/textures/stain.svg),
+    radial-gradient(circle at 15% 8%, rgba(255, 255, 255, .45), transparent 40%),
+    radial-gradient(circle at 92% 85%, rgba(120, 80, 30, .16), transparent 50%),
+    url(../img/textures/paper.svg);
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-position: right 4% bottom 3%, 0 0, 0 0, 0 0;
+  background-size: 220px 220px, auto, auto, 320px 320px;
+}
+.part {
+  border: 10px solid transparent;
+  border-image: url(../img/frames/part-frame.svg) 12 / 10px stretch;
+  background: rgba(255, 255, 255, .22) padding-box;
+}
+
+/* ---------- Cart drawer: tractor-feed order form ---------- */
+.drawer { padding-left: 26px; background: var(--paper) url(../img/textures/paper.svg) 0 0 / 320px 320px; }
+.drawer::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 26px;
+  background: radial-gradient(circle at 13px 12px, rgba(13, 10, 9, .8) 4.5px, transparent 5.5px) 0 0 / 26px 24px repeat-y;
+  border-right: 1.5px dashed rgba(29, 22, 17, .45);
+}
+
+/* ---------- Age gate: sunrise rays ---------- */
+.age-gate {
+  background:
+    radial-gradient(30% 42% at 50% 50%, rgba(13, 10, 9, .8), transparent 100%),
+    url(../img/textures/sunburst.svg) center bottom / max(1600px, 130%) auto no-repeat,
+    radial-gradient(50% 50% at 50% 30%, rgba(122, 75, 220, .25), transparent 70%),
+    var(--bg);
+}
+
+/* ---------- Footer: checkered flag strip ---------- */
+.site-footer { border-top: 0; }
+.site-footer::before {
+  content: ""; display: block; height: 16px; opacity: .85;
+  background: url(../img/textures/checker.svg) 0 0 / 16px 16px repeat-x;
+}
+
+@media (max-width: 640px) {
+  .events { --stub: 84px; }
+  .event { grid-template-columns: var(--stub) 1fr; gap: 0; }
+  .event > div:last-child { padding: 20px 18px 22px; }
+  .card, .pillar, .tile, .shop-card, .visit { padding: 28px; }
+}

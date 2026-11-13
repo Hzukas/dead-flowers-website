@@ -26,6 +26,25 @@ Pages: Home, Merch, Events, About, FAQ, Contact, plus `admin.html` (the shop adm
 | Colors, fonts, layout | `assets/css/styles.css` |
 | Header, footer, age gate, cart behavior | `assets/js/site.js` |
 
+## Custom frames and textures
+
+All decorative artwork is plain SVG, so it can be opened and edited in Illustrator, Figma, or Inkscape.
+
+| File | Used for |
+| --- | --- |
+| `assets/img/frames/pinstripe-*.svg` | Hot rod pinstripe corners on cards, tiles, FAQ, and popups (one file per color) |
+| `assets/img/frames/catalog-frame.svg` | Hex-nut border around the merch catalog sheet |
+| `assets/img/frames/part-frame.svg` | Frame around each merch item |
+| `assets/img/frames/filmstrip.svg` | 35mm film frames around About page photos |
+| `assets/img/textures/grain.svg` | Film grain over the whole site |
+| `assets/img/textures/paper.svg` | Aged paper on the catalog and order form |
+| `assets/img/textures/stain.svg` | Coffee ring on the catalog |
+| `assets/img/textures/sunburst.svg` | Rays behind page headers, the exclusives band, and the age gate |
+| `assets/img/textures/wave-stripes.svg` | Wavy 70s stripe dividers |
+| `assets/img/textures/checker.svg` | Checkered flag strip above the footer |
+
+To swap one, replace the file and keep its name. To change colors or shapes across the whole set, edit `tools/make-assets.js` and run `node tools/make-assets.js`. That overwrites the SVGs above.
+
 ## Landing graphic slot
 
 The hero at the top of `index.html` is a placeholder. The comment above it explains the swap:

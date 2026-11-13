@@ -24,6 +24,19 @@
     el._t = setTimeout(function () { el.textContent = ''; }, 5000);
   }
 
+  // Two-step confirm without browser popups (those can be blocked in embedded previews).
+  // First click relabels the button; a second click within 4 seconds goes ahead.
+  function confirmed(btn, label) {
+    if (btn.getAttribute('data-armed')) return true;
+    var original = btn.textContent;
+    btn.setAttribute('data-armed', '1');
+    btn.textContent = label;
+    setTimeout(function () {
+      if (btn.isConnected) { btn.removeAttribute('data-armed'); btn.textContent = original; }
+    }, 4000);
+    return false;
+  }
+
   /* ---------- Tabs ---------- */
   function showTab(name) {
     $$('[data-tab]').forEach(function (b) { b.setAttribute('aria-selected', b.getAttribute('data-tab') === name ? 'true' : 'false'); });
@@ -75,7 +88,7 @@
   function getItems() { return JSON.parse(JSON.stringify(DF.getMerch())); }
   function saveItems(items) {
     if (DF.store.set('df_merch', items)) return true;
-    alert('Could not save. If you added a photo, try a smaller one.');
+    flash($('[data-list-msg]'), 'Could not save. If you added a photo, try a smaller one.', true);
     return false;
   }
 
@@ -107,10 +120,11 @@
     if (!row) return;
     var id = row.getAttribute('data-id');
     if (e.target.closest('[data-edit]')) { openForm(id); return; }
-    if (e.target.closest('[data-delete]')) {
+    var delBtn = e.target.closest('[data-delete]');
+    if (delBtn) {
       var items = getItems();
       var p = items.filter(function (x) { return x.id === id; })[0];
-      if (!p || !confirm('Remove "' + p.name + '" from the store? This cannot be undone.')) return;
+      if (!p || !confirmed(delBtn, 'Click again to remove')) return;
       if (saveItems(items.filter(function (x) { return x.id !== id; }))) {
         if (editingId === id) closeForm();
         renderList();
@@ -281,7 +295,7 @@
 
   /* ---------- Reset ---------- */
   $('[data-reset]').addEventListener('click', function () {
-    if (!confirm('Put the demo hours and merch back the way they started?')) return;
+    if (!confirmed(this, 'Click again to reset')) return;
     ['df_merch', 'df_hours', 'df_holiday'].forEach(DF.store.remove);
     closeForm();
     renderHoursEditor();

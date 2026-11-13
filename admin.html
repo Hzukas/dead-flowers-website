@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Shop Admin | Dead Flowers</title>
+  <link rel="icon" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-no-gate data-no-cart>
+  <div class="admin-banner">Demo admin. On the live site this page sits behind a login. Changes here are saved only in this browser.</div>
+  <header class="admin-top">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html">
+        <span class="badge"><img src="assets/img/logo.png" alt=""></span>
+        <span class="wordmark">Dead Flowers<small>Shop admin</small></span>
+      </a>
+      <a class="btn btn-outline btn-sm view-site" href="index.html" target="_blank" rel="noopener">View website</a>
+    </div>
+    <div class="stripes"></div>
+  </header>
+
+  <main id="main" class="wrap admin-layout">
+    <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+      <button type="button" role="tab" aria-selected="true" data-tab="hours">Store hours</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="merch">Merch</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="help">Help</button>
+    </div>
+
+    <div>
+      <!-- ============ HOURS ============ -->
+      <section data-panel="hours" role="tabpanel">
+        <div class="panel">
+          <h2>Store hours</h2>
+          <div class="howto">
+            <h3>How to change hours</h3>
+            <ol>
+              <li>Change the times for any day below. Uncheck <strong>Open</strong> if the shop is closed that day.</li>
+              <li>Click <strong>Save hours</strong>.</li>
+              <li>That's it. The website shows the new hours right away.</li>
+            </ol>
+          </div>
+          <div class="hours-edit" data-hours-edit></div>
+          <label>Holiday or special notice
+            <span class="help-text">Shows as a yellow bar at the top of every page. Leave it empty to hide the bar.</span>
+            <textarea data-holiday-input placeholder="Example: Closed Thanksgiving Day. Open 10 AM to 6 PM on Black Friday."></textarea>
+          </label>
+          <div class="save-row">
+            <button type="button" class="btn btn-primary" data-save-hours>Save hours</button>
+            <p class="saved" data-hours-saved role="status"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MERCH ============ -->
+      <section data-panel="merch" role="tabpanel" hidden>
+        <div class="panel">
+          <h2>Merch</h2>
+          <div class="howto">
+            <h3>Quick guide</h3>
+            <ol>
+              <li><strong>Add a shirt:</strong> click "Add new item", fill in the form, then click Save item.</li>
+              <li><strong>Change a price or name:</strong> click Edit next to the item.</li>
+              <li><strong>Sold out?</strong> Uncheck "Show on site" to hide it without deleting it.</li>
+              <li><strong>Gone for good?</strong> Click Remove.</li>
+            </ol>
+          </div>
+          <div class="admin-list" data-merch-list></div>
+          <div class="save-row">
+            <button type="button" class="btn btn-primary" data-add-item>+ Add new item</button>
+            <p class="saved" data-list-msg role="status"></p>
+          </div>
+        </div>
+
+        <div class="panel" data-item-form-panel hidden>
+          <h2 data-form-title>Add new item</h2>
+          <form class="form" data-item-form novalidate>
+            <div class="form-grid">
+              <label class="full">Item name
+                <input name="name" type="text" placeholder="Example: Racing Stripe Tee">
+              </label>
+              <label>Price (US dollars)
+                <input name="price" type="number" min="0" step="0.01" placeholder="30.00">
+              </label>
+              <label>Part number
+                <span class="help-text">Filled in for you. Change it if you like.</span>
+                <input name="partNo" type="text">
+              </label>
+              <div class="label full">Sizes
+                <div class="checks" data-size-checks></div>
+              </div>
+              <label class="full">Description
+                <textarea name="desc" placeholder="One or two sentences about the item."></textarea>
+              </label>
+              <label class="full">Spanish description (optional)
+                <span class="help-text">Leave empty to show the English description on the Spanish site.</span>
+                <textarea name="desc_es"></textarea>
+              </label>
+              <label class="full">Photo (optional)
+                <span class="help-text">A photo replaces the drawing. Any JPG or PNG from your phone or computer works.</span>
+                <input name="photo" type="file" accept="image/*">
+              </label>
+              <label>Shirt color for the drawing
+                <input name="color" type="color" value="#161616">
+              </label>
+              <label>Drawing style
+                <select name="design">
+                  <option value="stripes">Racing stripes</option>
+                  <option value="text">Words</option>
+                  <option value="logo">Logo</option>
+                  <option value="flames">Flames</option>
+                  <option value="plain">Plain</option>
+                </select>
+              </label>
+              <label class="full">Words on the shirt
+                <span class="help-text">Only used with the "Words" drawing style.</span>
+                <input name="print" type="text" placeholder="SPEED &amp; SUPPLY">
+              </label>
+              <div class="full preview-box">
+                <div class="line-thumb" data-preview></div>
+                <div>
+                  <p class="help-text" style="margin:0 0 8px">Preview</p>
+                  <button type="button" class="btn btn-danger btn-sm" data-remove-photo hidden>Remove photo</button>
+                </div>
+              </div>
+            </div>
+            <div class="save-row">
+              <button type="submit" class="btn btn-primary">Save item</button>
+              <button type="button" class="btn btn-outline" data-cancel>Cancel</button>
+              <p class="saved" data-form-msg role="status"></p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============ HELP ============ -->
+      <section data-panel="help" role="tabpanel" hidden>
+        <div class="panel">
+          <h2>Help</h2>
+          <p class="lead">Step-by-step instructions for the everyday jobs.</p>
+          <div class="help-list">
+            <details open>
+              <summary>Post holiday hours</summary>
+              <ol>
+                <li>Click <strong>Store hours</strong> on the left.</li>
+                <li>Type the notice in the Holiday box, for example "Closed Christmas Day."</li>
+                <li>If the times change that week, change them for that day.</li>
+                <li>Click <strong>Save hours</strong>.</li>
+                <li>After the holiday, empty the Holiday box, set the times back, and click Save hours again.</li>
+              </ol>
+            </details>
+            <details>
+              <summary>Add a new shirt</summary>
+              <ol>
+                <li>Click <strong>Merch</strong>, then <strong>+ Add new item</strong>.</li>
+                <li>Type the name and price, and tick the sizes you have.</li>
+                <li>Add a photo if you have one. If not, pick a color and style for the drawing.</li>
+                <li>Click <strong>Save item</strong>. It shows on the Merch page right away.</li>
+              </ol>
+            </details>
+            <details>
+              <summary>Change a price</summary>
+              <ol>
+                <li>Click <strong>Merch</strong>, then <strong>Edit</strong> next to the shirt.</li>
+                <li>Type the new price.</li>
+                <li>Click <strong>Save item</strong>.</li>
+              </ol>
+            </details>
+            <details>
+              <summary>Hide a sold-out shirt</summary>
+              <ol>
+                <li>Click <strong>Merch</strong>.</li>
+                <li>Uncheck <strong>Show on site</strong> next to the shirt. It disappears from the store but stays saved here.</li>
+                <li>When it's back in stock, check the box again.</li>
+              </ol>
+            </details>
+            <details>
+              <summary>Remove a shirt for good</summary>
+              <ol>
+                <li>Click <strong>Merch</strong>, then <strong>Remove</strong> next to the shirt.</li>
+                <li>Click OK to confirm.</li>
+              </ol>
+            </details>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Start over</h2>
+          <p class="lead">Put the demo hours and merch back the way they started.</p>
+          <button type="button" class="btn btn-danger" data-reset>Reset demo data</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/site-data.js"></script>
+  <script src="assets/js/merch-data.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | Dead Flowers Dispensary</title>
+  <meta name="description" content="Hours, address, and contact info for Dead Flowers Dispensary in Palmer Lake, Colorado.">
+  <link rel="icon" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-title-key="title.contact">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <span class="kicker" data-i18n="contact.kicker"></span>
+        <h1 data-i18n="contact.title"></h1>
+        <p data-i18n="contact.intro"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap contact-grid">
+        <div class="stack">
+          <div class="card">
+            <span class="kicker" data-i18n="contact.address"></span>
+            <div class="value" data-address></div>
+            <p style="margin:14px 0 0"><a class="btn btn-primary btn-sm" href="#" data-directions target="_blank" rel="noopener" data-i18n="home.directions"></a></p>
+          </div>
+          <div class="card">
+            <span class="kicker" data-i18n="contact.phone"></span>
+            <div class="value" data-phone></div>
+          </div>
+          <div class="card">
+            <span class="kicker" data-i18n="contact.email"></span>
+            <div class="value" data-email></div>
+          </div>
+          <!-- Swap for a Google Maps embed once the street address is in. -->
+          <div class="ph map-slot" data-i18n="contact.mapSlot"></div>
+        </div>
+
+        <div class="stack">
+          <div class="card">
+            <h2 data-i18n="contact.hoursTitle"></h2>
+            <table class="hours-table"><tbody data-hours-table></tbody></table>
+          </div>
+          <div class="card">
+            <h2 data-i18n="contact.formTitle"></h2>
+            <form class="form" data-contact-form>
+              <label><span data-i18n="contact.name"></span><input type="text" name="name" autocomplete="name" required></label>
+              <label><span data-i18n="contact.emailField"></span><input type="email" name="email" autocomplete="email" required></label>
+              <label><span data-i18n="contact.message"></span><textarea name="message" required></textarea></label>
+              <div><button class="btn btn-primary" type="submit" data-i18n="contact.send"></button></div>
+              <p class="form-msg" data-form-msg role="status"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/site-data.js"></script>
+  <script src="assets/js/merch-data.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

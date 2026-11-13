@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dead Flowers Dispensary | Palmer Lake, CO</title>
+  <meta name="description" content="Dead Flowers Dispensary in Palmer Lake, Colorado. Recreational and medical cannabis, rock and roll, and muscle cars.">
+  <link rel="icon" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-title-key="title.home">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <!-- =================================================================
+         LANDING GRAPHIC SLOT
+         1. Background: put the psychedelic loop inside .hero-bg and remove
+            the "placeholder" class. A muted looping video plays smoother and
+            loads lighter than a GIF:
+              <video autoplay muted loop playsinline poster="assets/img/hero-poster.jpg">
+                <source src="assets/video/hero.webm" type="video/webm">
+                <source src="assets/video/hero.mp4" type="video/mp4">
+              </video>
+            Or a GIF:  <img src="assets/img/hero.gif" alt="">
+         2. Logo: swap the badge below for the transparent floating logo, e.g.
+              <img class="hero-float" src="assets/img/logo-transparent.png" alt="Dead Flowers Dispensary">
+         3. Delete the .hero-slot-label paragraph.
+         ================================================================= -->
+    <section class="hero" aria-label="Dead Flowers Dispensary">
+      <div class="hero-bg placeholder" aria-hidden="true"></div>
+      <div class="hero-logo">
+        <span class="badge badge-xl"><img src="assets/img/logo.png" alt="Dead Flowers Dispensary"></span>
+      </div>
+      <p class="hero-slot-label" data-i18n="home.heroSlot"></p>
+      <a class="hero-scroll" href="#shop" data-i18n-aria="home.scroll">&darr;</a>
+    </section>
+
+    <section class="section" id="shop">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker" data-i18n="home.shopKicker"></span>
+          <h2 data-i18n="home.shopTitle"></h2>
+        </div>
+        <div class="shop-band">
+          <a class="shop-card" href="#" data-jane="rec">
+            <span class="tag-line" data-i18n="home.recTag"></span>
+            <h3 data-i18n="home.recTitle"></h3>
+            <p data-i18n="home.recText"></p>
+            <span class="go" data-i18n="home.shopCta"></span>
+          </a>
+          <a class="shop-card med" href="#" data-jane="med">
+            <span class="tag-line" data-i18n="home.medTag"></span>
+            <h3 data-i18n="home.medTitle"></h3>
+            <p data-i18n="home.medText"></p>
+            <span class="go" data-i18n="home.shopCta"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="wrap">
+        <div class="tiles">
+          <a class="tile" href="merch.html" style="--c: var(--yellow)">
+            <span class="num">01</span>
+            <h3 data-i18n="tile.merchTitle"></h3>
+            <p data-i18n="tile.merchText"></p>
+            <span class="go" data-i18n="tile.merchCta"></span>
+          </a>
+          <a class="tile" href="events.html" style="--c: var(--pink)">
+            <span class="num">02</span>
+            <h3 data-i18n="tile.eventsTitle"></h3>
+            <p data-i18n="tile.eventsText"></p>
+            <span class="go" data-i18n="tile.eventsCta"></span>
+          </a>
+          <a class="tile" href="about.html" style="--c: var(--green)">
+            <span class="num">03</span>
+            <h3 data-i18n="tile.aboutTitle"></h3>
+            <p data-i18n="tile.aboutText"></p>
+            <span class="go" data-i18n="tile.aboutCta"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section exclusive">
+      <div class="wrap">
+        <span class="kicker" data-i18n="home.exclusiveKicker"></span>
+        <h2 data-i18n="home.exclusiveTitle"></h2>
+        <p data-i18n="home.exclusiveText"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="visit">
+          <div>
+            <span class="kicker" data-hours-status></span>
+            <div class="big" data-hours-today></div>
+          </div>
+          <div>
+            <span class="kicker" data-i18n="home.address"></span>
+            <div data-address></div>
+          </div>
+          <div class="visit-actions">
+            <a class="btn btn-primary" href="#" data-directions target="_blank" rel="noopener" data-i18n="home.directions"></a>
+            <a class="btn btn-outline" href="contact.html" data-i18n="home.allHours"></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/site-data.js"></script>
+  <script src="assets/js/merch-data.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

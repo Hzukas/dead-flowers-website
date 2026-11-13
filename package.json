@@ -1,0 +1,14 @@
+{
+  "name": "dead-flowers-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Website mockup for Dead Flowers Dispensary, Palmer Lake, CO",
+  "scripts": {
+    "test": "node tools/test/verify.js",
+    "serve": "node tools/test/serve.js",
+    "assets": "node tools/make-assets.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}

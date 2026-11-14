@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dead Flowers: animated hero test page</title>
+  <!-- Standalone test page for assets/js/hero-melt.js. Not part of the site.
+       Add ?herot=1.8 to the address to freeze the intro at 1.8 seconds. -->
+  <style>
+    html, body { margin: 0; background: #0d0a09; color: #f3e6c8; font-family: system-ui, sans-serif; }
+    .bar { height: 76px; display: flex; align-items: center; padding: 0 24px; border-bottom: 1px solid #34291f; box-sizing: border-box; }
+    .hero { position: relative; overflow: hidden; min-height: 80vh; display: grid; place-items: center; padding: 80px 16px; }
+    .hero-bg { position: absolute; inset: 0; }
+    .hero-logo { position: relative; z-index: 1; }
+    .hero-float { display: block; height: auto; width: clamp(240px, 34vw, 420px); }
+    .below { padding: 60px 24px; }
+    .deals-box { max-width: 900px; margin: 0 auto; min-height: 260px; padding: 28px; box-sizing: border-box; background: #efe2c2; color: #1d1611; border: 3px solid #1d1611; border-radius: 6px; font-weight: 700; }
+    button { font: inherit; padding: 8px 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="bar">Hero test page &nbsp; <button onclick="DFHero.replay()">Replay intro</button></div>
+  <section class="hero" aria-label="Dead Flowers Dispensary">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-logo">
+      <img class="hero-float" src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851">
+    </div>
+  </section>
+  <div class="below"><div class="deals-box" data-hero-drip-target>MONTHLY DEALS BOX (stand-in)</div></div>
+  <script src="assets/js/hero-melt.js"></script>
+</body>
+</html>

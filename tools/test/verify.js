@@ -58,6 +58,8 @@ async function load(page, storage = {}) {
     beforeParse(win) {
       for (const [k, v] of Object.entries(storage)) win.localStorage.setItem(k, JSON.stringify(v));
       win.scrollTo = () => {};
+      // jsdom has no WebGL. Report "unavailable" so pages take their no-WebGL fallback.
+      win.HTMLCanvasElement.prototype.getContext = () => null;
       win.Element.prototype.scrollIntoView = function () {};
       win.alert = m => errors.push('alert: ' + m);
       win.confirm = () => true;
@@ -107,6 +109,8 @@ console.log('\n[home]');
   ok(!doc.querySelector('.modal-overlay'), 'popup closes');
   click(win, doc.querySelector('.site-header [data-lang-toggle]'));
   ok(doc.querySelector('.nav-links a[href="merch.html"]').textContent === 'Mercancía' && doc.documentElement.lang === 'es', 'language toggle switches the nav to Spanish');
+  const heroLogo = doc.querySelector('.hero .hero-float');
+  ok(!!heroLogo && !doc.querySelector('.hero').classList.contains('hero-live'), 'without WebGL the hero keeps the plain logo');
   const deals = doc.querySelector('[data-deals]');
   ok(!deals.hidden && deals.querySelectorAll('.deals-list li').length === 1 && deals.textContent.includes('Wana'), 'monthly deals show on the home page');
   ok(deals.querySelector('[data-deals-title]').textContent === 'Ofertas de Noviembre', 'deals title follows the language: ' + deals.querySelector('[data-deals-title]').textContent);

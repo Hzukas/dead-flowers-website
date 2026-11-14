@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
   <title>Dead Flowers Dispensary | Palmer Lake, CO</title>
   <meta name="description" content="Dead Flowers Dispensary in Palmer Lake, Colorado. Recreational and medical cannabis, rock and roll, and muscle cars.">
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
@@ -16,18 +17,11 @@
 
   <main id="main">
     <!-- =================================================================
-         LANDING GRAPHIC SLOT
-         1. Background: put the psychedelic loop inside .hero-bg and remove
-            the "placeholder" class. A muted looping video plays smoother and
-            loads lighter than a GIF:
-              <video autoplay muted loop playsinline poster="assets/img/hero-poster.jpg">
-                <source src="assets/video/hero.webm" type="video/webm">
-                <source src="assets/video/hero.mp4" type="video/mp4">
-              </video>
-            Or a GIF:  <img src="assets/img/hero.gif" alt="">
-         2. Delete the .hero-slot-label paragraph.
-         The floating logo is assets/img/logo-full.webp (PNG fallback beside it),
-         made from the master cutout assets/img/logo-transparent.png.
+         ANIMATED LANDING HERO
+         assets/js/hero-melt.js paints the melting background and the logo
+         into a canvas inside .hero-bg. The <img> below stays in the page:
+         it sets where the logo sits, and it is what shows if the animation
+         can't run (very old browser). See README, "Animated landing hero".
          ================================================================= -->
     <section class="hero" aria-label="Dead Flowers Dispensary">
       <div class="hero-bg placeholder" aria-hidden="true"></div>
@@ -37,7 +31,6 @@
           <img class="hero-float" src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851">
         </picture>
       </div>
-      <p class="hero-slot-label" data-i18n="home.heroSlot"></p>
       <a class="hero-scroll" href="#main-content" data-i18n-aria="home.scroll">&darr;</a>
     </section>
 
@@ -139,5 +132,6 @@
   <script src="assets/js/merch-data.js"></script>
   <script src="assets/js/i18n.js"></script>
   <script src="assets/js/site.js"></script>
+  <script src="assets/js/hero-melt.js"></script>
 </body>
 </html>

@@ -43,7 +43,6 @@ window.DF_I18N = {
     'jane.bodyMed': 'This opens the Dead Flowers medical menu on I Heart Jane in a new tab. Have your Colorado medical card ready.',
     'jane.note': 'Preview build: the menu links get connected in the next round.',
 
-    'home.heroSlot': 'Landing graphic slot: logo over psychedelic loop',
     'home.scroll': 'Scroll down',
     'home.shopKicker': 'Shop cannabis',
     'home.shopTitle': 'Order ahead on our online menu',
@@ -227,7 +226,6 @@ window.DF_I18N = {
     'jane.bodyMed': 'Esto abre el menú medicinal de Dead Flowers en I Heart Jane en una pestaña nueva. Ten a la mano tu tarjeta médica de Colorado.',
     'jane.note': 'Versión de prueba: los enlaces del menú se conectan en la próxima ronda.',
 
-    'home.heroSlot': 'Espacio del gráfico principal: logo sobre fondo psicodélico',
     'home.scroll': 'Bajar',
     'home.shopKicker': 'Compra cannabis',
     'home.shopTitle': 'Pide por adelantado en nuestro menú en línea',

@@ -514,6 +514,7 @@
         DF.store.set('df_age_ok', true);
         gate.remove();
         document.body.classList.remove('locked');
+        document.dispatchEvent(new CustomEvent('df:age-ok'));
       } else if (e.target.closest('[data-age-no]')) {
         gate.querySelector('[data-age-ask]').hidden = true;
         gate.querySelector('[data-age-denied]').hidden = false;

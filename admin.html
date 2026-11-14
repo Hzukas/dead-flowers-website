@@ -27,6 +27,7 @@
   <main id="main" class="wrap admin-layout">
     <div class="admin-tabs" role="tablist" aria-label="Admin sections">
       <button type="button" role="tab" aria-selected="true" data-tab="hours">Store hours</button>
+      <button type="button" role="tab" aria-selected="false" data-tab="deals">Monthly deals</button>
       <button type="button" role="tab" aria-selected="false" data-tab="merch">Merch</button>
       <button type="button" role="tab" aria-selected="false" data-tab="help">Help</button>
     </div>
@@ -53,6 +54,32 @@
             <button type="button" class="btn btn-primary" data-save-hours>Save hours</button>
             <p class="saved" data-hours-saved role="status"></p>
           </div>
+        </div>
+      </section>
+
+      <!-- ============ DEALS ============ -->
+      <section data-panel="deals" role="tabpanel" hidden>
+        <div class="panel">
+          <h2>Monthly deals</h2>
+          <div class="howto">
+            <h3>How to post this month's deals</h3>
+            <ol>
+              <li>Pick the month.</li>
+              <li>Type each deal in the <strong>Deal</strong> box, for example "Buy 2 Wana, get 1 free". Add fine print if you need it.</li>
+              <li>Click <strong>+ Add another deal</strong> for more. Click <strong>Remove</strong> to drop one.</li>
+              <li>Click <strong>Save deals</strong>. They show at the top of the home page right away.</li>
+            </ol>
+          </div>
+          <label class="deals-month">Month
+            <select data-deals-month></select>
+          </label>
+          <div class="deal-rows" data-deal-rows></div>
+          <div class="save-row">
+            <button type="button" class="btn btn-outline" data-add-deal>+ Add another deal</button>
+            <button type="button" class="btn btn-primary" data-save-deals>Save deals</button>
+            <p class="saved" data-deals-saved role="status"></p>
+          </div>
+          <p class="help-text">No deals this month? Remove them all and save. The deals section disappears from the home page until you add new ones.</p>
         </div>
       </section>
 
@@ -154,6 +181,15 @@
               </ol>
             </details>
             <details>
+              <summary>Change the monthly deals</summary>
+              <ol>
+                <li>Click <strong>Monthly deals</strong> on the left.</li>
+                <li>Pick the new month.</li>
+                <li>Change the wording of each deal, remove last month's, and add new ones.</li>
+                <li>Click <strong>Save deals</strong>.</li>
+              </ol>
+            </details>
+            <details>
               <summary>Add a new shirt</summary>
               <ol>
                 <li>Click <strong>Merch</strong>, then <strong>+ Add new item</strong>.</li>
@@ -189,7 +225,7 @@
         </div>
         <div class="panel">
           <h2>Start over</h2>
-          <p class="lead">Put the demo hours and merch back the way they started.</p>
+          <p class="lead">Put the demo hours, deals, and merch back the way they started.</p>
           <button type="button" class="btn btn-danger" data-reset>Reset demo data</button>
         </div>
       </section>

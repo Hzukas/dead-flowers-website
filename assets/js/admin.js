@@ -84,6 +84,84 @@
     flash(msg, ok ? 'Saved. The website now shows the new hours.' : 'Could not save in this browser.', !ok);
   });
 
+  /* ---------- Monthly deals ---------- */
+  var monthSelect = $('[data-deals-month]');
+  monthSelect.innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function (m) {
+    return '<option value="' + m + '">' + esc(DF.monthName(m)) + '</option>';
+  }).join('');
+
+  function dealRowHTML(d, i) {
+    d = d || {};
+    var t = d.title || {}, x = d.detail || {};
+    return '<div class="deal-row">' +
+      '<div class="deal-row-head"><strong>Deal ' + (i + 1) + '</strong>' +
+        '<button type="button" class="btn btn-danger btn-sm" data-remove-deal>Remove</button></div>' +
+      '<div class="form-grid">' +
+        '<label class="full">Deal<input type="text" data-f="title_en" value="' + esc(t.en) + '" placeholder="Example: Buy 2 Wana, get 1 free"></label>' +
+        '<label class="full">Fine print (optional)<input type="text" data-f="detail_en" value="' + esc(x.en) + '" placeholder="Example: Gummies only. While supplies last."></label>' +
+        '<label>Deal in Spanish (optional)<span class="help-text">Leave empty to show the English on the Spanish site.</span>' +
+          '<input type="text" data-f="title_es" value="' + esc(t.es) + '"></label>' +
+        '<label>Fine print in Spanish (optional)<span class="help-text">&nbsp;</span>' +
+          '<input type="text" data-f="detail_es" value="' + esc(x.es) + '"></label>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function readDealRows() {
+    return $$('.deal-row').map(function (row) {
+      var v = function (k) { return row.querySelector('[data-f="' + k + '"]').value.trim(); };
+      return { title: { en: v('title_en'), es: v('title_es') }, detail: { en: v('detail_en'), es: v('detail_es') } };
+    });
+  }
+
+  function renderDealRows(items) {
+    var box = $('[data-deal-rows]');
+    box.innerHTML = items.length
+      ? items.map(dealRowHTML).join('')
+      : '<p class="help-text">No deals right now. Click "Add another deal" to add one.</p>';
+  }
+
+  function renderDealsEditor() {
+    var deals = DF.getDeals();
+    monthSelect.value = String(deals.month || new Date().getMonth() + 1);
+    renderDealRows(JSON.parse(JSON.stringify(deals.items || [])));
+  }
+
+  $('[data-add-deal]').addEventListener('click', function () {
+    var items = readDealRows();
+    items.push(null);
+    renderDealRows(items);
+    var rows = $$('.deal-row');
+    rows[rows.length - 1].querySelector('input').focus();
+  });
+
+  $('[data-deal-rows]').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-remove-deal]');
+    if (!btn) return;
+    var row = btn.closest('.deal-row');
+    var index = $$('.deal-row').indexOf(row);
+    var items = readDealRows();
+    var hasText = items[index].title.en || items[index].detail.en;
+    if (hasText && !confirmed(btn, 'Click again to remove')) return;
+    items.splice(index, 1);
+    renderDealRows(items);
+  });
+
+  $('[data-save-deals]').addEventListener('click', function () {
+    var rows = readDealRows();
+    var msg = $('[data-deals-saved]');
+    if (rows.some(function (d) { return !d.title.en && (d.detail.en || d.title.es || d.detail.es); })) {
+      flash(msg, 'Each deal needs something in the Deal box, or remove it.', true);
+      return;
+    }
+    var items = rows.filter(function (d) { return d.title.en; });
+    var ok = DF.store.set('df_deals', { month: Number(monthSelect.value), items: items });
+    renderDealRows(items);
+    flash(msg, !ok ? 'Could not save in this browser.'
+      : items.length ? 'Saved. The home page now shows ' + items.length + (items.length === 1 ? ' deal.' : ' deals.')
+      : 'Saved. The deals section is hidden until you add a deal.', !ok);
+  });
+
   /* ---------- Merch list ---------- */
   function getItems() { return JSON.parse(JSON.stringify(DF.getMerch())); }
   function saveItems(items) {
@@ -296,14 +374,16 @@
   /* ---------- Reset ---------- */
   $('[data-reset]').addEventListener('click', function () {
     if (!confirmed(this, 'Click again to reset')) return;
-    ['df_merch', 'df_hours', 'df_holiday'].forEach(DF.store.remove);
+    ['df_merch', 'df_hours', 'df_holiday', 'df_deals'].forEach(DF.store.remove);
     closeForm();
     renderHoursEditor();
+    renderDealsEditor();
     renderList();
     showTab('hours');
     flash($('[data-hours-saved]'), 'Demo data reset.');
   });
 
   renderHoursEditor();
+  renderDealsEditor();
   renderList();
 })();

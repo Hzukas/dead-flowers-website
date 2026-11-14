@@ -1,3 +1,4 @@
 node_modules/
 tools/test/shots/
 .claude/
+Screenshot *.png

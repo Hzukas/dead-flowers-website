@@ -56,6 +56,7 @@
     $$('[data-i18n]', root).forEach(function (el) { el.textContent = DF.t(el.getAttribute('data-i18n')); });
     $$('[data-i18n-placeholder]', root).forEach(function (el) { el.placeholder = DF.t(el.getAttribute('data-i18n-placeholder')); });
     $$('[data-i18n-aria]', root).forEach(function (el) { el.setAttribute('aria-label', DF.t(el.getAttribute('data-i18n-aria'))); });
+    $$('[data-i18n-alt]', root).forEach(function (el) { el.alt = DF.t(el.getAttribute('data-i18n-alt')); });
     document.documentElement.lang = DF.lang;
     var titleKey = document.body.getAttribute('data-title-key');
     if (titleKey) document.title = DF.t(titleKey);
@@ -265,12 +266,16 @@
 
   function renderContactInfo() {
     $$('[data-address]').forEach(function (el) { el.textContent = DF.addressText(); });
-    $$('[data-phone]').forEach(function (el) { el.textContent = SITE.phone; });
-    $$('[data-email]').forEach(function (el) { el.textContent = SITE.email; });
+    $$('[data-phone]').forEach(function (el) {
+      el.innerHTML = '<a href="tel:+1' + esc(SITE.phone.replace(/\D/g, '')) + '">' + esc(SITE.phone) + '</a>';
+    });
+    $$('[data-email]').forEach(function (el) {
+      el.innerHTML = '<a href="mailto:' + esc(SITE.email) + '">' + esc(SITE.email) + '</a>';
+    });
     $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
     $$('[data-directions]').forEach(function (el) {
       el.href = 'https://www.google.com/maps/search/?api=1&query=' +
-        encodeURIComponent('Dead Flowers Dispensary ' + SITE.address.city + ' ' + SITE.address.state);
+        encodeURIComponent('Dead Flowers Dispensary, ' + DF.addressText());
     });
     $$('[data-social]').forEach(function (el) {
       var url = SITE.links[el.getAttribute('data-social')];
@@ -298,6 +303,27 @@
           (isToday ? ' &middot; ' + esc(DF.t('contact.today')) : '') + '</td><td>' + esc(DF.hoursText(find(d))) + '</td></tr>';
       }).join('');
     });
+  }
+
+  DF.getDeals = function () { return DF.store.get('df_deals', null) || SITE.deals || { month: 1, items: [] }; };
+  DF.monthName = function (month, style) {
+    return cap(new Date(2024, (Number(month) || 1) - 1, 15).toLocaleDateString(DF.locale(), { month: style || 'long' }));
+  };
+
+  function renderDeals() {
+    var section = document.querySelector('[data-deals]');
+    if (!section) return;
+    var deals = DF.getDeals();
+    var items = (deals.items || []).filter(function (d) { return DF.pick(d.title); });
+    section.hidden = !items.length;
+    if (!items.length) return;
+    var month = DF.monthName(deals.month);
+    section.querySelector('[data-deals-title]').textContent = DF.t('deals.title').replace('{month}', month);
+    section.querySelector('[data-deals-month-short]').textContent = DF.monthName(deals.month, 'short').replace('.', '');
+    section.querySelector('[data-deals-list]').innerHTML = items.map(function (d) {
+      var detail = DF.pick(d.detail);
+      return '<li><strong>' + esc(DF.pick(d.title)) + '</strong>' + (detail ? '<span>' + esc(detail) + '</span>' : '') + '</li>';
+    }).join('');
   }
 
   function renderEvents() {
@@ -565,6 +591,7 @@
     renderHoliday();
     renderContactInfo();
     renderHours();
+    renderDeals();
     renderEvents();
     renderCart();
     DF.renderHooks.forEach(function (fn) { fn(); });

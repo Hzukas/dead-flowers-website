@@ -35,7 +35,23 @@
         <span class="badge badge-xl"><img src="assets/img/logo.png" alt="Dead Flowers Dispensary"></span>
       </div>
       <p class="hero-slot-label" data-i18n="home.heroSlot"></p>
-      <a class="hero-scroll" href="#shop" data-i18n-aria="home.scroll">&darr;</a>
+      <a class="hero-scroll" href="#main-content" data-i18n-aria="home.scroll">&darr;</a>
+    </section>
+
+    <div id="main-content"></div>
+    <!-- Monthly deals. Edited in admin.html (Monthly deals tab) or in site-data.js. Hidden when there are no deals. -->
+    <section class="section deals" data-deals hidden>
+      <div class="wrap">
+        <div class="deals-board">
+          <div class="deals-burst" aria-hidden="true"><span data-deals-month-short></span></div>
+          <div class="deals-body">
+            <span class="kicker" data-i18n="deals.kicker"></span>
+            <h2 data-deals-title></h2>
+            <ul class="deals-list" data-deals-list></ul>
+            <p class="deals-fine" data-i18n="deals.fine"></p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="section" id="shop">

@@ -33,13 +33,15 @@ Before switching computers, commit and push your changes. When you sit down at t
 - **English / Español toggle** in the header. All site text lives in `assets/js/i18n.js`.
 - **Shop Rec / Shop Med** buttons open the I Heart Jane menus. Until the links are added in `assets/js/site-data.js`, they show a "coming soon" popup.
 - **Merch store** styled as a vintage auto parts catalog, with a cart ("order form"), a dispensary discount code field, and a checkout placeholder until a payment processor is set up.
-- **Admin demo** (`admin.html`) where Robbie can change hours, post a holiday notice, and add, edit, hide, or remove merch, with plain-language instructions. In the mockup, changes are saved only in the browser being used.
+- **Monthly deals** on the home page, right under the hero. A green starburst shows the month, and each deal has a headline and optional fine print in English and Spanish. The section hides itself when there are no deals.
+- **Admin demo** (`admin.html`) where Robbie can change hours, post a holiday notice, update the monthly deals, and add, edit, hide, or remove merch, with plain-language instructions. In the mockup, changes are saved only in the browser being used.
 
 ## Where to edit things
 
 | What | File |
 | --- | --- |
-| Address, phone, email, hours, Jane and social links, events | `assets/js/site-data.js` |
+| Address, phone, email, hours, monthly deals, Jane and social links, events | `assets/js/site-data.js` |
+| Store photos on the About page | `assets/img/store/` |
 | Starting merch list | `assets/js/merch-data.js` |
 | All wording, English and Spanish | `assets/js/i18n.js` |
 | Colors, fonts, layout | `assets/css/styles.css` |
@@ -74,12 +76,10 @@ The hero at the top of `index.html` is a placeholder. The comment above it expla
 
 ## Placeholders still to replace
 
-- Street address, phone, and email (in brackets in `site-data.js`)
-- Store hours (sample values)
-- I Heart Jane rec and med links, Instagram and Facebook links
+- I Heart Jane rec and med links
 - Events (samples)
 - Merch items, prices, and photos
-- Store photos on the About page, and a map on the Contact page
+- A map on the Contact page
 - The logo is a 1.3 MB PNG with a white background. The live site needs a smaller, transparent version.
 
 ## Not built yet (needs decisions)

@@ -127,10 +127,10 @@ p { margin: 0 0 1em; }
 .badge {
   display: grid; place-items: center; flex-shrink: 0;
   width: 46px; height: 46px; border-radius: 50%;
-  background: #fff; overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #2a2016, #0d0a09 75%); overflow: hidden;
   box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--orange);
 }
-.badge img { width: 92%; height: auto; }
+.badge img { width: 78%; height: auto; }
 .badge-xl {
   width: clamp(220px, 34vw, 360px); height: clamp(220px, 34vw, 360px);
   box-shadow:
@@ -248,6 +248,22 @@ p { margin: 0 0 1em; }
   100% { background-position: 100% 100%; }
 }
 .hero-logo { position: relative; z-index: 1; }
+/* Transparent logo. The thin cream outline lifts its dark navy lettering off the dark page. */
+.hero-float, .age-logo {
+  display: block; height: auto;
+  filter:
+    drop-shadow(1.5px 0 0 var(--text)) drop-shadow(-1.5px 0 0 var(--text))
+    drop-shadow(0 1.5px 0 var(--text)) drop-shadow(0 -1.5px 0 var(--text))
+    drop-shadow(0 24px 40px rgba(0, 0, 0, .65));
+}
+.hero-float {
+  width: clamp(240px, 34vw, 420px);
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-14px) rotate(1deg); }
+}
 .hero-slot-label {
   position: absolute; left: 32px; bottom: 28px; z-index: 1; margin: 0;
   font-family: var(--mono); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
@@ -263,7 +279,7 @@ p { margin: 0 0 1em; }
   .hero-slot-label { left: 24px; right: 24px; bottom: 80px; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-bg.placeholder { animation: none; }
+  .hero-bg.placeholder, .hero-float { animation: none; }
   html { scroll-behavior: auto; }
 }
 
@@ -604,7 +620,7 @@ textarea { min-height: 140px; resize: vertical; }
     var(--bg);
 }
 .age-card { max-width: 480px; }
-.age-card .badge { margin: 30px auto 48px; }
+.age-logo { width: clamp(170px, 42vw, 230px); margin: 8px auto 28px; }
 .age-card h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); margin-bottom: .2em; }
 .age-card .q { font-size: 1.3rem; margin-bottom: 26px; }
 .age-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

@@ -68,11 +68,22 @@ To swap one, replace the file and keep its name. To change colors or shapes acro
 
 ## Landing graphic slot
 
-The hero at the top of `index.html` is a placeholder. The comment above it explains the swap:
+The transparent logo already floats in the hero. The background behind it is still a placeholder. The comment above it explains the swap:
 
 1. Put the psychedelic loop inside `.hero-bg` and remove its `placeholder` class. A muted, looping MP4 or WebM plays smoother and loads lighter than a GIF.
-2. Replace the round logo badge with the transparent logo.
-3. Delete the "Landing graphic slot" label.
+2. Delete the "Landing graphic slot" label.
+
+## Logo files
+
+| File | Used for |
+| --- | --- |
+| `assets/img/logo-transparent.png` | Master cutout (900 KB). Not loaded by the site; the files below are made from it. |
+| `assets/img/logo-full.webp` | Floating logo in the hero and on the age gate (192 KB) |
+| `assets/img/logo-full.png` | Fallback for browsers without WebP |
+| `assets/img/logo-mark.png` | Guitar-leaf mark in the header badge, admin, and the logo shirt drawing |
+| `assets/img/favicon.png` | Browser tab icon |
+
+The site gives the full logo a thin cream outline in CSS (`.hero-float`, `.age-logo`), because its dark navy lettering disappears on the dark background. The old `assets/img/logo.png` (white background, 1.3 MB) is no longer used.
 
 ## Placeholders still to replace
 
@@ -80,7 +91,6 @@ The hero at the top of `index.html` is a placeholder. The comment above it expla
 - Events (samples)
 - Merch items, prices, and photos
 - A map on the Contact page
-- The logo is a 1.3 MB PNG with a white background. The live site needs a smaller, transparent version.
 
 ## Not built yet (needs decisions)
 

@@ -126,8 +126,8 @@
               '<rect x="74" y="111" width="52" height="3" fill="#b8301c"/>';
         break;
       case 'logo':
-        art = '<circle cx="100" cy="110" r="27" fill="#ffffff" stroke="#ff6b1a" stroke-width="3"/>' +
-              '<image href="assets/img/logo.png" x="76" y="86" width="48" height="48"/>';
+        art = '<circle cx="100" cy="110" r="27" fill="#0d0a09" stroke="#ff6b1a" stroke-width="3"/>' +
+              '<image href="assets/img/logo-mark.png" x="80" y="90" width="40" height="40"/>';
         break;
       case 'flames':
         art = '<path d="M52 184 L52 160 Q60 150 64 136 Q70 154 78 150 Q82 132 92 124 Q94 146 104 146 Q110 130 120 128 Q118 148 128 150 Q136 138 148 140 L148 184 Z" fill="#ff6b1a"/>' +
@@ -150,7 +150,7 @@
   /* ---------- Shared layout ---------- */
   function brandHTML() {
     return '<a class="brand" href="index.html" aria-label="Dead Flowers Dispensary">' +
-      '<span class="badge"><img src="assets/img/logo.png" alt=""></span>' +
+      '<span class="badge"><img src="assets/img/logo-mark.png" alt=""></span>' +
       '<span class="wordmark">Dead Flowers<small data-i18n="brand.tagline"></small></span></a>';
   }
 
@@ -225,7 +225,8 @@
     return '' +
       '<div class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title" data-age-gate>' +
         '<div class="age-card">' +
-          '<span class="badge badge-lg"><img src="assets/img/logo.png" alt="Dead Flowers Dispensary"></span>' +
+          '<picture><source srcset="assets/img/logo-full.webp" type="image/webp">' +
+            '<img class="age-logo" src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851"></picture>' +
           '<div data-age-ask>' +
             '<h1 id="age-title" data-i18n="age.title"></h1>' +
             '<p class="q" data-i18n="age.question"></p>' +

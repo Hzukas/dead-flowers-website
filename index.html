@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dead Flowers Dispensary | Palmer Lake, CO</title>
   <meta name="description" content="Dead Flowers Dispensary in Palmer Lake, Colorado. Recreational and medical cannabis, rock and roll, and muscle cars.">
-  <link rel="icon" href="assets/img/logo.png">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,14 +25,17 @@
                 <source src="assets/video/hero.mp4" type="video/mp4">
               </video>
             Or a GIF:  <img src="assets/img/hero.gif" alt="">
-         2. Logo: swap the badge below for the transparent floating logo, e.g.
-              <img class="hero-float" src="assets/img/logo-transparent.png" alt="Dead Flowers Dispensary">
-         3. Delete the .hero-slot-label paragraph.
+         2. Delete the .hero-slot-label paragraph.
+         The floating logo is assets/img/logo-full.webp (PNG fallback beside it),
+         made from the master cutout assets/img/logo-transparent.png.
          ================================================================= -->
     <section class="hero" aria-label="Dead Flowers Dispensary">
       <div class="hero-bg placeholder" aria-hidden="true"></div>
       <div class="hero-logo">
-        <span class="badge badge-xl"><img src="assets/img/logo.png" alt="Dead Flowers Dispensary"></span>
+        <picture>
+          <source srcset="assets/img/logo-full.webp" type="image/webp">
+          <img class="hero-float" src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851">
+        </picture>
       </div>
       <p class="hero-slot-label" data-i18n="home.heroSlot"></p>
       <a class="hero-scroll" href="#main-content" data-i18n-aria="home.scroll">&darr;</a>

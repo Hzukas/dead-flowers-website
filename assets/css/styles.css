@@ -529,7 +529,7 @@ textarea { min-height: 140px; resize: vertical; }
 
 /* ---------- Merch: a merch table at a show ----------
    Black drape and a warm spotlight, shirts on hangers with cardboard price tags,
-   and a table with a cloth banner. Tapping a shirt opens a close-up (.mt-pop). */
+   and a table with a black cloth. Tapping a shirt opens a close-up (.mt-pop). */
 .mt-venue {
   position: relative; overflow: hidden; padding: 56px 0 0;
   background:
@@ -628,19 +628,6 @@ textarea { min-height: 140px; resize: vertical; }
     linear-gradient(#0b0909, #050404);
   clip-path: polygon(0 0, 100% 0, 100% 92%, 94% 100%, 86% 94%, 76% 100%, 64% 95%, 52% 100%, 40% 94%, 28% 100%, 16% 95%, 6% 100%, 0 93%);
 }
-.mt-banner {
-  position: absolute; left: 50%; top: 18px; transform: translateX(-50%) rotate(-1deg);
-  padding: 14px 34px 12px; background: #efe2c2; color: #1d1611;
-  font-family: var(--display); font-size: clamp(1.6rem, 4.2vw, 2.6rem); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
-  box-shadow: 0 8px 14px rgba(0, 0, 0, .6);
-}
-.mt-banner::before, .mt-banner::after {
-  content: ""; position: absolute; top: 8px; width: 10px; height: 10px; border-radius: 50%;
-  background: #777; box-shadow: inset 0 0 0 3px #333;
-}
-.mt-banner::before { left: 10px; }
-.mt-banner::after { right: 10px; }
-.mt-banner em { font-style: normal; color: var(--red-ink); }
 .mt-ship { text-align: center; padding: 18px 0 8px; margin: 0; font-family: var(--mono); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .mt-fine { text-align: center; padding: 0 0 48px; margin: 0; font-family: var(--mono); font-size: .78rem; color: var(--dim); }
 

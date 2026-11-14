@@ -35,6 +35,15 @@
      assets/img/logo-hero.webp   the logo
      assets/img/logo-field.png   blurred logo shape (bulge, shadow, outline)
 
+   THE 21+ GATE
+   The same paint in black and white, without the logo, fills the age gate
+   ([data-age-gate]) behind its pop-up. It is found automatically on every page
+   that loads this script, hero or not, and it shuts itself down and frees its
+   graphics context when the gate is removed. DFHero.mountGate(element) does the
+   same by hand and returns { canvas, destroy, seek } (or null without WebGL2).
+   While it runs, the gate has the class "age-gate-live".
+   Preview: hero-demo.html?gate=1
+
    Handy in the browser console, or on hero-demo.html:
      DFHero.replay()     play the intro again
      DFHero.seek(1.8)    freeze the intro at 1.8 seconds
@@ -43,41 +52,7 @@
 (function () {
   'use strict';
 
-  var hero = document.querySelector('.hero');
-  if (!hero) return;
-  var bgEl = hero.querySelector('.hero-bg');
-  var logoEl = hero.querySelector('.hero-float');
-  if (!bgEl || !logoEl) return;
-
-  var canvas = document.createElement('canvas');
-  canvas.className = 'hero-canvas';
-  canvas.setAttribute('aria-hidden', 'true');
-  var gl = canvas.getContext('webgl2', {
-    alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false,
-    powerPreference: 'high-performance', preserveDrawingBuffer: false
-  });
-  if (!gl) return;
-
-  /* ------------------------------------------------------------------ styles
-     Everything the animation needs is added here, so the site stylesheet does not
-     have to change. Rules only apply once the hero has the "hero-live" class. */
-  var css = document.createElement('style');
-  css.setAttribute('data-hero-melt', '');
-  css.textContent = [
-    '.hero.hero-live{overflow:visible;z-index:2;background:none;min-height:min(calc(100vh - 76px),960px);min-height:min(calc(100svh - 76px),960px);padding:72px 16px 96px}',
-    '.hero-live .hero-bg{position:absolute;inset:0;background:none;animation:none;pointer-events:none}',
-    '.hero-live .hero-bg::after{display:none}',
-    '.hero-canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;pointer-events:none}',
-    '.hero-live .hero-float{width:min(78vw,52vh,500px);width:min(78vw,52svh,500px);opacity:0;animation:none;filter:none}',
-    '.hero-live .hero-slot-label{display:none}',
-    '.hero-live .hero-scroll{background:rgba(13,10,9,.55);border-color:rgba(243,230,200,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .8s ease 3.2s}',
-    '.hero-live.hero-playing .hero-scroll{opacity:1}'
-  ].join(' ');
-  document.head.appendChild(css);
-
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var params = new URLSearchParams(location.search);
-  var frozenAt = params.has('herot') ? parseFloat(params.get('herot')) : null;
 
   /* ---------------------------------------------------------------- shaders */
   var VERT = '#version 300 es\n' +
@@ -174,7 +149,7 @@
   ].join('\n');
 
   // Pass B: full-resolution composite. Pour front, drips, logo reveal, gloss, grain.
-  var FRAG_COMP = '#version 300 es\n' + COMMON + '\n' + [
+  var COMP_HEAD = [
     'in vec2 vUv; out vec4 outColor;',
     'uniform sampler2D uFluid;',
     'uniform sampler2D uLogoTex;',
@@ -189,7 +164,11 @@
     'uniform float uGlint;',
     'uniform float uCurtain;',   // y of the top curtain\'s edge
     'uniform float uCurtainLen;',
-    'uniform float uDripLen;',   // how far the bottom drips hang (reaches the box below the hero)
+    'uniform float uDripLen;'    // how far the bottom drips hang (reaches the box below the hero)
+  ].join('\n');
+
+  // Paint helpers shared by the hero and the age-gate picture: noise, drips, lip lighting.
+  var PAINT_LIB = [
     'const vec2 TOLIGHT = vec2(-0.6,-0.8);',
 
     'float h11(float n){ return fract(sin(n*127.1+311.7)*43758.5453); }',
@@ -279,8 +258,10 @@
     '  float hl = smoothstep(0.22,0.5,hn)*smoothstep(0.9,0.55,hn)*pow(max(nd,0.0),3.0);',
     '  col += vec3(1.0,0.98,0.95)*hl*0.6*amt;',
     '  return col;',
-    '}',
+    '}'
+  ].join('\n');
 
+  var COMP_MAIN = [
     'void main(){',
     '  vec2 p = vec2(vUv.x*uAspect, (1.0-vUv.y)*uSpan);',
     '  float px = uSpan/uRes.y;',
@@ -365,9 +346,247 @@
     '  outColor = vec4(col*alpha, alpha + shadow*(1.0-alpha));',
     '}'
   ].join('\n');
+  var FRAG_COMP = '#version 300 es\n' + [COMMON, COMP_HEAD, PAINT_LIB, COMP_MAIN].join('\n');
+
+  /* ---------------------------------------------------------------- age gate
+     The same liquid and the same drips in black and white, with no logo, as the
+     backdrop of the 21+ gate. Thick pale paint hangs from the top and sheds drops;
+     the sheet behind it gets darker toward the bottom so the pop-up stays readable.
+     It needs no image files, so it works on every page, with or without a hero. */
+  var FRAG_GATE = '#version 300 es\n' + COMMON + '\n' + [
+    'in vec2 vUv; out vec4 outColor;',
+    'uniform sampler2D uFluid;',
+    'uniform vec2 uRes;',
+    'uniform float uTime;',
+    'uniform float uIn;',        // fade-in of the sheet
+    'uniform float uCurtain;',
+    'uniform float uCurtainLen;',
+    'const vec3 LUMA = vec3(0.299,0.587,0.114);'
+  ].join('\n') + '\n' + PAINT_LIB + '\n' + [
+    'void main(){',
+    '  vec2 p = vec2(vUv.x*uAspect, 1.0-vUv.y);',
+    '  float px = 1.0/uRes.y;',
+    // the marbled sheet, in grey, fading to near black at the bottom
+    '  float lum = smoothstep(0.03,0.85,dot(texture(uFluid, vUv).rgb, LUMA));',
+    '  vec3 col = vec3(lum)*mix(0.52,0.06,smoothstep(0.05,0.95,p.y))*uIn;',
+    // thick pale paint hanging from the top, longer at the sides, shedding drops
+    '  vec2 pc = vec2(p.x+1.7, p.y-uCurtain);',
+    '  float endT = 1.0-uCurtain;',
+    '  float tT, tT2, tT3;',
+    '  float dT = dripSdf(pc, 0.115, uCurtainLen, 5.0, uTime, 1.7, 1.0, 1.0, endT, tT);',
+    '  float dT2 = dripSdf(pc+vec2(0.31,0.012), 0.047, uCurtainLen*0.42, 8.0, uTime*1.15, 2.01, 1.0, 1.0, endT, tT2);',
+    '  tT = mix(tT2, tT, smoothstep(-0.004,0.004,dT2-dT));',
+    '  dT = smin(dT, dT2, 0.012);',
+    '  float dTs = dripSdf(pc-vec2(0.012,0.02), 0.115, uCurtainLen, 5.0, uTime, 1.7, 1.0, 1.0, endT, tT3);',
+    '  col *= 1.0 - 0.6*smoothstep(0.03,-0.012,dTs);',
+    '  float cl = dot(texture(uFluid, vec2(0.83-vUv.x*0.6, 0.9-vUv.y*0.5)).rgb, LUMA);',
+    '  vec3 ct = vec3(mix(smoothstep(0.0,0.8,cl), 1.0, 0.2));',
+    '  ct = lip(ct, dT, 0.03, tT, 1.35);',
+    '  ct *= 1.0 - 0.5*smoothstep(-0.006,0.0,dT);',
+    '  ct *= mix(1.0,0.4,smoothstep(0.12,0.9,p.y));',      // drops dim as they fall into the dark
+    '  col = mix(col, ct, smoothstep(px,-px,dT));',
+    '  vec2 v = (vUv-0.5)*vec2(1.05,1.2);',
+    '  col *= 1.0 - 0.35*pow(dot(v,v)*2.0,1.6);',
+    '  col += (h21(gl_FragCoord.xy + fract(uTime)*91.0)-0.5)*0.03;',
+    '  outColor = vec4(clamp(col,0.0,1.0), 1.0);',
+    '}'
+  ].join('\n');
+
+  function mountGate(el) {
+    if (!el) return null;
+    if (el.__dfMelt) return el.__dfMelt;
+    var cv = document.createElement('canvas');
+    cv.className = 'age-gate-melt';
+    cv.setAttribute('aria-hidden', 'true');
+    // z-index -1 keeps it above the gate's own background and below everything else in the gate
+    cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;display:block;pointer-events:none;z-index:-1';
+    var g = cv.getContext('webgl2', { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' });
+    if (!g) return null;
+    var fp = program(g, FRAG_FLUID), gp = program(g, FRAG_GATE);
+    if (!fp || !gp) return null;
+
+    var buf = g.createBuffer();
+    g.bindBuffer(g.ARRAY_BUFFER, buf);
+    g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), g.STATIC_DRAW);
+    g.enableVertexAttribArray(0);
+    g.vertexAttribPointer(0, 2, g.FLOAT, false, 0, 0);
+
+    // the liquid shader expects the logo map; the gate has no logo, so give it an empty one
+    var blank = g.createTexture();
+    g.bindTexture(g.TEXTURE_2D, blank);
+    g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, 1, 1, 0, g.RGBA, g.UNSIGNED_BYTE, new Uint8Array(4));
+    g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.NEAREST);
+    g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.NEAREST);
+
+    var ftex = g.createTexture(), fbo = g.createFramebuffer(), fw = 0, fh = 0;
+    var W = 1, H = 1, q = 1;
+    function size() {
+      var r = el.getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      var scale = Math.min(Math.min(window.devicePixelRatio || 1, 2) * q, Math.sqrt(2.6e6 / (W * H)));
+      var w = Math.max(2, Math.round(W * scale)), h = Math.max(2, Math.round(H * scale));
+      if (cv.width === w && cv.height === h) return;
+      cv.width = w; cv.height = h;
+      fw = Math.max(2, Math.round(w * 0.5)); fh = Math.max(2, Math.round(h * 0.5));
+      g.bindTexture(g.TEXTURE_2D, ftex);
+      g.texImage2D(g.TEXTURE_2D, 0, g.RGBA8, fw, fh, 0, g.RGBA, g.UNSIGNED_BYTE, null);
+      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR);
+      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.LINEAR);
+      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_S, g.MIRRORED_REPEAT);
+      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, g.MIRRORED_REPEAT);
+      g.bindFramebuffer(g.FRAMEBUFFER, fbo);
+      g.framebufferTexture2D(g.FRAMEBUFFER, g.COLOR_ATTACHMENT0, g.TEXTURE_2D, ftex, 0);
+    }
+
+    var ms = { x: 0, y: 0, k: 0, tx: 0, ty: 0, tk: 0 };
+    function paint(tau, time) {
+      var aspect = W / H;
+      ms.x += (ms.tx - ms.x) * 0.08; ms.y += (ms.ty - ms.y) * 0.08;
+      ms.k += (ms.tk - ms.k) * 0.06; ms.tk *= 0.96;
+
+      g.bindFramebuffer(g.FRAMEBUFFER, fbo);
+      g.viewport(0, 0, fw, fh);
+      g.useProgram(fp.prog);
+      var u = fp.u;
+      g.uniform1f(u.uAspect, aspect);
+      g.uniform1f(u.uSpan, 1);
+      g.uniform1f(u.uTime, time);
+      g.uniform2f(u.uLogoC, 0.5, 0.5);
+      g.uniform2f(u.uLogoS, 1, 1);
+      g.uniform1f(u.uRot, 0);
+      g.uniform1f(u.uPush, 0);
+      g.uniform3f(u.uMouse, ms.x, ms.y, ms.k);
+      g.activeTexture(g.TEXTURE1); g.bindTexture(g.TEXTURE_2D, blank);
+      g.uniform1i(u.uField, 1);
+      g.drawArrays(g.TRIANGLE_STRIP, 0, 4);
+
+      g.bindFramebuffer(g.FRAMEBUFFER, null);
+      g.viewport(0, 0, cv.width, cv.height);
+      g.useProgram(gp.prog);
+      u = gp.u;
+      g.uniform1f(u.uAspect, aspect);
+      g.uniform2f(u.uRes, cv.width, cv.height);
+      g.uniform1f(u.uTime, time);
+      g.uniform1f(u.uIn, smooth(0, 0.7, tau));
+      g.uniform1f(u.uCurtain, -0.14 + 0.19 * easeOutCubic(tau / 2.2));
+      g.uniform1f(u.uCurtainLen, 0.36 * smooth(0.15, 3.4, tau));
+      g.activeTexture(g.TEXTURE0); g.bindTexture(g.TEXTURE_2D, ftex);
+      g.uniform1i(u.uFluid, 0);
+      g.drawArrays(g.TRIANGLE_STRIP, 0, 4);
+    }
+
+    var dead = false, rafId = 0, last = 0, t = 0, frames = 0, slow = 0;
+    function tick(now) {
+      rafId = 0;
+      if (dead || document.hidden) return;
+      var dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
+      last = now; t += dt;
+      paint(t, t + 20);
+      frames++;
+      if (frames > 30) {
+        if (dt > 0.03) slow++; else slow = Math.max(0, slow - 1);
+        if (slow > 25 && q > 0.45) { q *= 0.75; slow = 0; size(); }
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+    function go() {
+      if (dead) return;
+      size();
+      if (reduceMotion) { paint(100, 31); return; }
+      if (!rafId) { last = performance.now(); rafId = requestAnimationFrame(tick); }
+    }
+    function onMove(ev) {
+      var r = el.getBoundingClientRect();
+      var nx = (ev.clientX - r.left) / H, ny = (ev.clientY - r.top) / H;
+      ms.tk = Math.min(1, ms.tk + (Math.abs(nx - ms.tx) + Math.abs(ny - ms.ty)) * 6);
+      ms.tx = nx; ms.ty = ny;
+    }
+    function onVis() { if (!document.hidden) go(); }
+
+    var ro = window.ResizeObserver ? new ResizeObserver(go) : null;
+    if (ro) ro.observe(el);
+    window.addEventListener('resize', go);
+    document.addEventListener('visibilitychange', onVis);
+    el.addEventListener('pointermove', onMove, { passive: true });
+    // When the gate leaves the page, stop and hand the graphics context back.
+    var mo = window.MutationObserver ? new MutationObserver(function () { if (!document.documentElement.contains(el)) destroy(); }) : null;
+    if (mo) mo.observe(document.documentElement, { childList: true, subtree: true });
+
+    function destroy() {
+      if (dead) return;
+      dead = true;
+      if (rafId) cancelAnimationFrame(rafId);
+      if (ro) ro.disconnect();
+      if (mo) mo.disconnect();
+      window.removeEventListener('resize', go);
+      document.removeEventListener('visibilitychange', onVis);
+      el.removeEventListener('pointermove', onMove);
+      var lose = g.getExtension('WEBGL_lose_context');
+      if (lose) lose.loseContext();
+      cv.remove();
+      el.classList.remove('age-gate-live');
+      delete el.__dfMelt;
+    }
+    cv.addEventListener('webglcontextlost', function () { destroy(); });
+
+    el.insertBefore(cv, el.firstChild);
+    el.classList.add('age-gate-live');
+    var handle = { canvas: cv, destroy: destroy, seek: function (tau, at) { size(); paint(tau, (at == null ? t : at) + 20); } };
+    el.__dfMelt = handle;
+    go();
+    return handle;
+  }
+
+  function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+  function smooth(a, b, x) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
+  function easeOutCubic(x) { x = clamp01(x); return 1 - Math.pow(1 - x, 3); }
+
+  window.DFHero = { mountGate: mountGate, replay: function () {}, seek: function () {} };
+
+  // The gate is found by itself: now, once the page has finished loading, and if it is added later.
+  function findGate() { var el = document.querySelector('[data-age-gate]'); if (el) mountGate(el); }
+  findGate();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', findGate);
+  document.addEventListener('df:age-gate', findGate);
+
+  /* ------------------------------------------------------------------- hero */
+  var hero = document.querySelector('.hero');
+  if (!hero) return;
+  var bgEl = hero.querySelector('.hero-bg');
+  var logoEl = hero.querySelector('.hero-float');
+  if (!bgEl || !logoEl) return;
+
+  var canvas = document.createElement('canvas');
+  canvas.className = 'hero-canvas';
+  canvas.setAttribute('aria-hidden', 'true');
+  var gl = canvas.getContext('webgl2', {
+    alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false,
+    powerPreference: 'high-performance', preserveDrawingBuffer: false
+  });
+  if (!gl) return;
+
+  /* ------------------------------------------------------------------ styles
+     Everything the animation needs is added here, so the site stylesheet does not
+     have to change. Rules only apply once the hero has the "hero-live" class. */
+  var css = document.createElement('style');
+  css.setAttribute('data-hero-melt', '');
+  css.textContent = [
+    '.hero.hero-live{overflow:visible;z-index:2;background:none;min-height:min(calc(100vh - 76px),960px);min-height:min(calc(100svh - 76px),960px);padding:72px 16px 96px}',
+    '.hero-live .hero-bg{position:absolute;inset:0;background:none;animation:none;pointer-events:none}',
+    '.hero-live .hero-bg::after{display:none}',
+    '.hero-canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;pointer-events:none}',
+    '.hero-live .hero-float{width:min(78vw,52vh,500px);width:min(78vw,52svh,500px);opacity:0;animation:none;filter:none}',
+    '.hero-live .hero-slot-label{display:none}',
+    '.hero-live .hero-scroll{background:rgba(13,10,9,.55);border-color:rgba(243,230,200,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .8s ease 3.2s}',
+    '.hero-live.hero-playing .hero-scroll{opacity:1}'
+  ].join(' ');
+  document.head.appendChild(css);
+
+  var params = new URLSearchParams(location.search);
+  var frozenAt = params.has('herot') ? parseFloat(params.get('herot')) : null;
 
   /* ------------------------------------------------------------- GL helpers */
-  function compile(type, src) {
+  function compile(gl, type, src) {
     var s = gl.createShader(type);
     gl.shaderSource(s, src); gl.compileShader(s);
     if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
@@ -376,8 +595,8 @@
     }
     return s;
   }
-  function program(fragSrc) {
-    var v = compile(gl.VERTEX_SHADER, VERT), f = compile(gl.FRAGMENT_SHADER, fragSrc);
+  function program(gl, fragSrc) {
+    var v = compile(gl, gl.VERTEX_SHADER, VERT), f = compile(gl, gl.FRAGMENT_SHADER, fragSrc);
     if (!v || !f) return null;
     var p = gl.createProgram();
     gl.attachShader(p, v); gl.attachShader(p, f);
@@ -414,8 +633,8 @@
     });
   }
 
-  var fluidProg = program(FRAG_FLUID);
-  var compProg = program(FRAG_COMP);
+  var fluidProg = program(gl, FRAG_FLUID);
+  var compProg = program(gl, FRAG_COMP);
   if (!fluidProg || !compProg) return;
 
   var quad = gl.createBuffer();
@@ -480,10 +699,6 @@
   }
 
   /* --------------------------------------------------------------- timeline */
-  function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
-  function smooth(a, b, x) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
-  function easeOutCubic(x) { x = clamp01(x); return 1 - Math.pow(1 - x, 3); }
-
   var started = false, startAt = 0, clock = 0, lastNow = 0;
   var mouse = { x: 0, y: 0, k: 0, tx: 0, ty: 0, tk: 0 };
 
@@ -648,8 +863,6 @@
     console.warn('[hero] textures failed to load; keeping the static logo.', err);
   });
 
-  window.DFHero = {
-    replay: function () { frozenAt = null; begin(); },
-    seek: function (t, at) { frozenAt = t; if (at != null) clock = at; if (fieldTex) { layout(); draw(t, clock + 20); } kick(); }
-  };
+  window.DFHero.replay = function () { frozenAt = null; begin(); };
+  window.DFHero.seek = function (t, at) { frozenAt = t; if (at != null) clock = at; if (fieldTex) { layout(); draw(t, clock + 20); } kick(); };
 })();

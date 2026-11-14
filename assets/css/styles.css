@@ -751,15 +751,12 @@ textarea { min-height: 140px; resize: vertical; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- Age gate ---------- */
-/* Black-and-white paint behind (drawn by DFPaint.gate in paint.js), one colorful pop-up in the middle. */
+/* Black-and-white melting paint behind (hero-melt.js adds canvas.age-gate-melt), one colorful pop-up in the middle.
+   The gate is its own stacking context (fixed + z-index) so that canvas sits under the pop-up. */
 .age-gate {
   position: fixed; inset: 0; z-index: 200;
   display: grid; place-items: center; padding: 24px; text-align: center; overflow: auto;
   background: #0b0b0b;
-}
-.age-gate-paint {
-  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
-  filter: grayscale(1) contrast(1.15) brightness(.95);
 }
 @property --age-spin { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 .age-card {

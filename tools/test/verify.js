@@ -43,7 +43,7 @@ ok(bad.length === 0, 'all local href/src targets exist' + (bad.length ? ': ' + b
 
 // ---------- Dynamic: load a page in jsdom ----------
 async function load(page, storage = {}) {
-  let html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+  let html = fs.readFileSync(path.join(ROOT, page.split('?')[0]), 'utf8');   // page may carry ?query
   html = html.replace(/<script src="([^"]+)"><\/script>/g, (_, src) =>
     '<script>' + fs.readFileSync(path.join(ROOT, src), 'utf8').replace(/<\/script>/g, '<\\/script>') + '</script>');
   const errors = [];
@@ -94,6 +94,8 @@ console.log('\n[age gate]');
   ok(!doc.querySelector('[data-age-gate]') && store(win).df_age_ok === true, '"Yes" removes the gate and remembers it');
   const again = await load('index.html', { df_age_ok: true });
   ok(!again.doc.querySelector('[data-age-gate]'), 'gate stays away on the next visit');
+  const forced = await load('about.html?gate', { df_age_ok: true });
+  ok(!!forced.doc.querySelector('[data-age-gate]') && forced.errors.length === 0, '?gate shows the gate again after answering Yes');
   const admin = await load('admin.html');
   ok(!admin.doc.querySelector('[data-age-gate]'), 'admin page has no gate');
 }

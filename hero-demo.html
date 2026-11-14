@@ -27,6 +27,17 @@
     </div>
   </section>
   <div class="below"><div class="deals-box" data-hero-drip-target>MONTHLY DEALS BOX (stand-in)</div></div>
+  <script>
+    // hero-demo.html?gate=1 shows a stand-in 21+ gate so the black-and-white paint can be checked.
+    if (new URLSearchParams(location.search).has('gate')) {
+      var g = document.createElement('div');
+      g.setAttribute('data-age-gate', '');
+      g.style.cssText = 'position:fixed;inset:0;z-index:200;background:#0d0a09;display:grid;place-items:center';
+      g.innerHTML = '<div style="background:#efe2c2;color:#1d1611;border:3px solid #1d1611;border-radius:6px;padding:28px 32px;max-width:340px;text-align:center;font-weight:700">' +
+        'ARE YOU 21 OR OLDER?<br><br><button onclick="this.closest(\'[data-age-gate]\').remove()">Yes, I\'m 21+</button></div>';
+      document.body.appendChild(g);
+    }
+  </script>
   <script src="assets/js/hero-melt.js"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@ Before switching computers, commit and push your changes. When you sit down at t
 
 ## What's in it
 
-- **21+ age gate** on first visit, remembered afterward: a colorful pop-up over black-and-white dripping paint.
+- **21+ age gate** on first visit, remembered afterward: a colorful pop-up over a black-and-white version of the landing page's melting paint (from `hero-melt.js`). To see it again after answering Yes, add `?gate` to any page address, for example `index.html?gate`.
 - **English / Español toggle** in the header. All site text lives in `assets/js/i18n.js`.
 - **Shop Rec / Shop Med** buttons open the I Heart Jane menus. Until the links are added in `assets/js/site-data.js`, they show a "coming soon" popup.
 - **Merch store** styled as a merch table at a show: shirts hang on a rail with cardboard price tags under a spotlight, over a table with a banner. Tapping a shirt opens a close-up to pick a size and add it to the cart ("order form"), which has a dispensary discount code field and a checkout placeholder until a payment processor is set up. The stickers and lighters on the table are decoration until those products exist.
@@ -78,7 +78,7 @@ The transparent logo already floats in the hero. The background behind it is sti
 
 ## Shared paint (`assets/js/paint.js`)
 
-Makes the marbled paint texture used by the merch glops, and paints the age gate's background: a black-and-white sheet of that paint across the top with drips hanging off it. Loaded before `site.js` on every public page.
+Makes the marbled paint texture used by the merch glops. Loaded before `site.js` on every public page.
 
 ## Logo files
 

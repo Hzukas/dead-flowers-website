@@ -510,10 +510,13 @@
 
   /* ---------- Age gate (21+) ---------- */
   function ageGate() {
-    if (document.body.hasAttribute('data-no-gate') || DF.store.get('df_age_ok', false)) return;
+    // Add ?gate to any page address to see the gate again, even after answering Yes.
+    var forced = /[?&]gate(=|&|$)/.test(location.search);
+    if (document.body.hasAttribute('data-no-gate') || (DF.store.get('df_age_ok', false) && !forced)) return;
     document.body.insertAdjacentHTML('beforeend', ageGateHTML());
     var gate = document.querySelector('[data-age-gate]');
-    if (window.DFPaint) window.DFPaint.gate(gate);   // black-and-white paint behind the pop-up
+    // The black-and-white melting paint behind the pop-up comes from hero-melt.js,
+    // which finds [data-age-gate] by itself when it loads.
     DF.applyI18n(gate);
     renderLangToggle();
     document.body.classList.add('locked');

@@ -87,14 +87,15 @@ The site gives the full logo a thin cream outline in CSS (`.hero-float`, `.age-l
 
 ## Placeholders still to replace
 
-- I Heart Jane rec and med links
+- I Heart Jane rec and med links. The shop is already on Jane; these go in last, right before launch. Until then the buttons show the "coming soon" popup.
 - Events (samples)
 - Merch items, prices, and photos
 - A map on the Contact page
 
 ## Not built yet (needs decisions)
 
-- Payment processor and real checkout
-- How dispensary discount codes are issued and how much they take off
+- Merch checkout. Stripe, Shopify Payments, and Square all prohibit dispensaries, so they are out. Leading option: a Fourthwall store (its policy allows cannabis-imagery apparel; confirm with support@fourthwall.com that a dispensary can own the store). Fallback: a high-risk merchant account (PaymentCloud, PayKings, Easy Pay Direct).
+- Merch ships to the US and Canada only.
+- Merch discount codes: earned by spending money at the dispensary, redeemed on merch. Still to decide: how codes are issued and how much they take off.
 - A real admin login and storage, so Robbie's edits reach every visitor
 - Colorado compliance review of the footer and age-gate wording

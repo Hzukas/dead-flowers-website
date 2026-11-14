@@ -167,7 +167,29 @@ p { margin: 0 0 1em; }
   font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; color: var(--muted);
 }
 .site-nav { display: flex; align-items: center; gap: 22px; margin-left: auto; }
+.nav-right { display: flex; align-items: center; gap: 22px; }
 .nav-links { display: flex; gap: 22px; }
+
+/* Site header: links left, logo centered (hanging below the bar), shop + tools right.
+   The logo shrinks into the bar once the page scrolls (.scrolled is set in site.js). */
+.site-header .header-inner { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; }
+.site-header .site-nav { display: contents; }
+.site-header .nav-links { grid-column: 1; grid-row: 1; justify-self: start; }
+.site-header .nav-right { grid-column: 3; grid-row: 1; justify-self: end; }
+.header-logo {
+  grid-column: 2; grid-row: 1; align-self: start; justify-self: center;
+  position: relative; z-index: 2; height: 76px; padding-top: 8px; display: block;
+}
+.header-logo img {
+  display: block; width: auto; height: 140px;
+  transition: height .25s ease, transform .25s ease;
+  filter:
+    drop-shadow(1px 0 0 var(--text)) drop-shadow(-1px 0 0 var(--text))
+    drop-shadow(0 1px 0 var(--text)) drop-shadow(0 -1px 0 var(--text))
+    drop-shadow(0 10px 18px rgba(0, 0, 0, .7));
+}
+.header-logo:hover img { transform: rotate(-3deg) scale(1.03); }
+.site-header.scrolled .header-logo img { height: 62px; }
 .nav-links a {
   text-decoration: none; font-family: var(--display); text-transform: uppercase;
   letter-spacing: .06em; font-size: 1.02rem; color: var(--muted);
@@ -202,15 +224,22 @@ p { margin: 0 0 1em; }
 .nav-toggle span:nth-child(3) { background: var(--pink); }
 
 @media (max-width: 1100px) {
-  .nav-toggle { display: inline-flex; }
-  .site-nav {
+  .nav-toggle { display: inline-flex; grid-column: 3; grid-row: 1; justify-self: end; align-self: center; }
+  .site-header .site-nav, .site-nav {
     display: none;
     position: absolute; top: 100%; left: -16px; right: -16px;
     flex-direction: column; align-items: stretch; gap: 18px;
     padding: 20px 16px 24px;
     background: var(--bg-2); border-bottom: 1px solid var(--line);
   }
-  .site-nav.open { display: flex; }
+  .site-header .site-nav.open { display: flex; }
+  .site-header .header-inner { min-height: 68px; }
+  .header-logo { height: 68px; padding-top: 6px; }
+  .header-logo img { height: 92px; }
+  .site-header.scrolled .header-logo img { height: 56px; }
+  .site-header .nav-links, .site-header .nav-right { grid-column: auto; grid-row: auto; justify-self: stretch; }
+  .nav-right { flex-direction: column; align-items: stretch; gap: 18px; }
+  .nav-tools { justify-content: flex-start; }
   .nav-links { flex-direction: column; gap: 2px; }
   .nav-links a { font-size: 1.4rem; padding: 8px 0; }
   .nav-shop .btn { flex: 1; }

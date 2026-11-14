@@ -159,7 +159,12 @@
       '<a class="skip-link" href="#main" data-i18n="a11y.skip"></a>' +
       '<div class="holiday-banner" data-holiday hidden></div>' +
       '<header class="site-header">' +
-        '<div class="wrap header-inner">' + brandHTML() +
+        '<div class="wrap header-inner">' +
+          // Pages with data-no-header-logo on <body> (the home page, which has the big logo) skip it.
+          (document.body.hasAttribute('data-no-header-logo') ? '' :
+          '<a class="header-logo" href="index.html" aria-label="Dead Flowers Dispensary">' +
+            '<picture><source srcset="assets/img/logo-full.webp" type="image/webp">' +
+            '<img src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851"></picture></a>') +
           '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">' +
             '<span></span><span></span><span></span><span class="sr" data-i18n="nav.menu"></span></button>' +
           '<nav class="site-nav" id="site-nav" aria-label="Main">' +
@@ -170,14 +175,16 @@
               '<a href="faq.html" data-i18n="nav.faq"></a>' +
               '<a href="contact.html" data-i18n="nav.contact"></a>' +
             '</div>' +
-            '<div class="nav-shop">' +
-              '<a class="btn btn-primary btn-sm" href="#" data-jane="rec" data-i18n="nav.shopRec"></a>' +
-              '<a class="btn btn-green btn-sm" href="#" data-jane="med" data-i18n="nav.shopMed"></a>' +
-            '</div>' +
-            '<div class="nav-tools">' +
-              '<button class="icon-btn" type="button" data-lang-toggle></button>' +
-              '<button class="icon-btn" type="button" data-cart-open><span data-i18n="nav.cart"></span>' +
-                '<span class="cart-count" data-cart-count>0</span></button>' +
+            '<div class="nav-right">' +
+              '<div class="nav-shop">' +
+                '<a class="btn btn-primary btn-sm" href="#" data-jane="rec" data-i18n="nav.shopRec"></a>' +
+                '<a class="btn btn-green btn-sm" href="#" data-jane="med" data-i18n="nav.shopMed"></a>' +
+              '</div>' +
+              '<div class="nav-tools">' +
+                '<button class="icon-btn" type="button" data-lang-toggle></button>' +
+                '<button class="icon-btn" type="button" data-cart-open><span data-i18n="nav.cart"></span>' +
+                  '<span class="cart-count" data-cart-count>0</span></button>' +
+              '</div>' +
             '</div>' +
           '</nav>' +
         '</div>' +
@@ -608,8 +615,18 @@
 
     markActiveNav();
     bindGlobal();
+    watchScroll();
     DF.render();
     ageGate();
+  }
+
+  // Shrinks the hanging header logo into the bar once the page scrolls.
+  function watchScroll() {
+    var header = document.querySelector('.site-header');
+    if (!header) return;
+    var update = function () { header.classList.toggle('scrolled', window.scrollY > 40); };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
   }
 
   document.addEventListener('DOMContentLoaded', init);

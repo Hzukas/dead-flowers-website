@@ -279,7 +279,7 @@ p { margin: 0 0 1em; }
 }
 .hero-logo { position: relative; z-index: 1; }
 /* Transparent logo. The thin cream outline lifts its dark navy lettering off the dark page. */
-.hero-float, .age-logo {
+.hero-float {
   display: block; height: auto;
   filter:
     drop-shadow(1.5px 0 0 var(--text)) drop-shadow(-1.5px 0 0 var(--text))
@@ -400,10 +400,8 @@ p { margin: 0 0 1em; }
 .deals-list span { display: block; color: var(--muted); margin-top: 4px; }
 .deals-fine { margin: 18px 0 0; font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; color: var(--dim); }
 
-/* ---------- Paint drips down the page edges (assets/js/page-drips.js) ---------- */
+/* ---------- Paint glops along the page edges (assets/js/page-drips.js) ---------- */
 .page-drips { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 45; pointer-events: none; }
-/* Room at the bottom of the page for the paint pool above the footer. */
-body[data-page-drips] main { padding-bottom: 72px; }
 
 /* ---------- Home: visit strip ---------- */
 .visit {
@@ -494,11 +492,12 @@ body[data-page-drips] main { padding-bottom: 72px; }
 .card .kicker { margin-bottom: .4em; }
 .card .value { font-size: 1.15rem; }
 .card .value a { text-decoration-color: var(--orange); text-underline-offset: 3px; }
-.hours-note { margin: 14px 0 0; font-family: var(--mono); font-size: .85rem; color: var(--muted); }
+.hours-note { margin: 16px 0 0; font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--muted); }
 .card h2 { font-size: 1.9rem; }
-.hours-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: .95rem; }
-.hours-table td { padding: 10px 0; border-bottom: 1px solid var(--line); }
-.hours-table td:last-child { text-align: right; }
+.hours-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: clamp(1.05rem, 2.6vw, 1.25rem); font-weight: 700; color: var(--text); }
+.hours-table td { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.hours-table td:last-child { text-align: right; white-space: nowrap; padding-left: 12px; }
+@media (max-width: 420px) { .hours-table { font-size: 1rem; } }
 .hours-table tr.today td { color: var(--yellow); font-weight: 700; }
 .map-slot { aspect-ratio: 16 / 9; }
 .form { display: grid; gap: 16px; }
@@ -661,19 +660,45 @@ textarea { min-height: 140px; resize: vertical; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- Age gate ---------- */
+/* Black-and-white paint behind (drawn by DFPaint.gate in paint.js), one colorful pop-up in the middle. */
 .age-gate {
   position: fixed; inset: 0; z-index: 200;
   display: grid; place-items: center; padding: 24px; text-align: center; overflow: auto;
-  background:
-    radial-gradient(50% 50% at 50% 30%, rgba(122, 75, 220, .25), transparent 70%),
-    var(--bg);
+  background: #0b0b0b;
 }
-.age-card { max-width: 480px; }
-.age-logo { width: clamp(170px, 42vw, 230px); margin: 8px auto 28px; }
-.age-card h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); margin-bottom: .2em; }
-.age-card .q { font-size: 1.3rem; margin-bottom: 26px; }
+.age-gate-paint {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+  filter: grayscale(1) contrast(1.15) brightness(.95);
+}
+@property --age-spin { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.age-card {
+  position: relative; width: min(440px, 100%); padding: 7px; border-radius: 22px;
+  background: conic-gradient(from var(--age-spin), #ffed1f, #ff8005, #ff0aa8, #851afa, #0d38ff, #00e0f5, #46c246, #ffed1f);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, .6), 0 0 60px rgba(255, 10, 168, .35), 0 0 120px rgba(0, 224, 245, .25), 0 30px 60px rgba(0, 0, 0, .7);
+  animation: age-spin 8s linear infinite;
+}
+@keyframes age-spin { to { --age-spin: 360deg; } }
+.age-card-inner {
+  border-radius: 16px; padding: clamp(28px, 6vw, 44px) clamp(22px, 5vw, 40px) 26px;
+  background: radial-gradient(120% 90% at 50% 0%, #2a1645, #120a14 70%);
+}
+.age-card h1 {
+  font-size: clamp(2.2rem, 8vw, 3.2rem); line-height: 1.05; margin: 0 0 26px;
+  background: linear-gradient(90deg, #ffed1f, #ff8005, #ff0aa8, #a35cff, #00e0f5);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.age-card [data-age-denied] h1 { margin-bottom: 12px; }
+.age-card .q { font-size: 1.15rem; margin: 0 0 6px; color: var(--text); }
 .age-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.age-card .fine { color: var(--dim); margin-top: 26px; }
+.age-actions .btn { min-width: 150px; }
+.age-card .fine { color: var(--dim); margin: 22px 0 0; font-size: .82rem; }
+.age-lang {
+  margin-top: 12px; background: none; border: 0; padding: 4px 8px; cursor: pointer;
+  color: var(--muted); font-family: var(--mono); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-lang:hover { color: var(--text); }
+@media (prefers-reduced-motion: reduce) { .age-card { animation: none; } }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--bg-2); border-top: 1px solid var(--line); }
@@ -895,15 +920,6 @@ body::after {
   content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 26px;
   background: radial-gradient(circle at 13px 12px, rgba(13, 10, 9, .8) 4.5px, transparent 5.5px) 0 0 / 26px 24px repeat-y;
   border-right: 1.5px dashed rgba(29, 22, 17, .45);
-}
-
-/* ---------- Age gate: sunrise rays ---------- */
-.age-gate {
-  background:
-    radial-gradient(30% 42% at 50% 50%, rgba(13, 10, 9, .8), transparent 100%),
-    url(../img/textures/sunburst.svg) center bottom / max(1600px, 130%) auto no-repeat,
-    radial-gradient(50% 50% at 50% 30%, rgba(122, 75, 220, .25), transparent 70%),
-    var(--bg);
 }
 
 /* ---------- Footer: checkered flag strip ---------- */

@@ -231,12 +231,9 @@
   function ageGateHTML() {
     return '' +
       '<div class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title" data-age-gate>' +
-        '<div class="age-card">' +
-          '<picture><source srcset="assets/img/logo-full.webp" type="image/webp">' +
-            '<img class="age-logo" src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851"></picture>' +
+        '<div class="age-card"><div class="age-card-inner">' +
           '<div data-age-ask>' +
-            '<h1 id="age-title" data-i18n="age.title"></h1>' +
-            '<p class="q" data-i18n="age.question"></p>' +
+            '<h1 id="age-title" data-i18n="age.question"></h1>' +
             '<div class="age-actions">' +
               '<button class="btn btn-primary" type="button" data-age-yes data-i18n="age.yes"></button>' +
               '<button class="btn btn-outline" type="button" data-age-no data-i18n="age.no"></button>' +
@@ -244,8 +241,8 @@
           '</div>' +
           '<div data-age-denied hidden><h1 data-i18n="age.deniedTitle"></h1><p class="q" data-i18n="age.denied"></p></div>' +
           '<p class="fine" data-i18n="age.note"></p>' +
-          '<button class="icon-btn" type="button" data-lang-toggle style="margin-top:18px"></button>' +
-        '</div>' +
+          '<button class="age-lang" type="button" data-lang-toggle></button>' +
+        '</div></div>' +
       '</div>';
   }
 
@@ -511,6 +508,7 @@
     if (document.body.hasAttribute('data-no-gate') || DF.store.get('df_age_ok', false)) return;
     document.body.insertAdjacentHTML('beforeend', ageGateHTML());
     var gate = document.querySelector('[data-age-gate]');
+    if (window.DFPaint) window.DFPaint.gate(gate);   // black-and-white paint behind the pop-up
     DF.applyI18n(gate);
     renderLangToggle();
     document.body.classList.add('locked');

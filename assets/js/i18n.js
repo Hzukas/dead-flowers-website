@@ -25,7 +25,6 @@ window.DF_I18N = {
     'nav.shopMed': 'Shop Med',
     'nav.cart': 'Cart',
 
-    'age.title': 'Welcome to Dead Flowers',
     'age.question': 'Are you 21 or older?',
     'age.yes': "Yes, I'm 21+",
     'age.no': 'No',
@@ -208,7 +207,6 @@ window.DF_I18N = {
     'nav.shopMed': 'Tienda Med',
     'nav.cart': 'Carrito',
 
-    'age.title': 'Bienvenido a Dead Flowers',
     'age.question': '¿Tienes 21 años o más?',
     'age.yes': 'Sí, tengo 21+',
     'age.no': 'No',

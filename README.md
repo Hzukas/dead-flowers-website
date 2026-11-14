@@ -73,6 +73,10 @@ The transparent logo already floats in the hero. The background behind it is sti
 1. Put the psychedelic loop inside `.hero-bg` and remove its `placeholder` class. A muted, looping MP4 or WebM plays smoother and loads lighter than a GIF.
 2. Delete the "Landing graphic slot" label.
 
+## Paint drips on the merch page
+
+`assets/js/page-drips.js` runs a few streams of psychedelic paint down the left and right edges of the page and pools them at the bottom, above the footer. Short drips grow a bead and drop it into the pool. It's turned on per page with `data-page-drips` on `<body>`; `data-drips-frame=".catalog"` puts a drip on each side of the catalog frame. Load the script after `site.js`. To add it to another page, add those attributes and the script tag. Number, width, and length of drips are set in `layout()` in the script.
+
 ## Logo files
 
 | File | Used for |

@@ -527,78 +527,157 @@ input:focus, textarea:focus, select:focus { border-color: var(--orange); outline
 textarea { min-height: 140px; resize: vertical; }
 .form-msg { font-family: var(--mono); color: var(--green); min-height: 1.2em; margin: 0; }
 
-/* ---------- Merch: the parts catalog ---------- */
-.catalog {
-  position: relative;
-  padding: clamp(20px, 4vw, 48px);
-  background: var(--paper); color: var(--ink);
-  background-image:
-    radial-gradient(circle at 15% 8%, rgba(255, 255, 255, .45), transparent 40%),
-    radial-gradient(circle at 92% 85%, rgba(120, 80, 30, .16), transparent 50%);
-  border-radius: 3px;
-  box-shadow: 0 30px 70px rgba(0, 0, 0, .55);
+/* ---------- Merch: a merch table at a show ----------
+   Black drape and a warm spotlight, shirts on hangers with cardboard price tags,
+   and a table with a cloth banner. Tapping a shirt opens a close-up (.mt-pop). */
+.mt-venue {
+  position: relative; overflow: hidden; padding: 56px 0 0;
+  background:
+    radial-gradient(60% 55% at 50% 0%, rgba(255, 196, 120, .30), transparent 70%),
+    radial-gradient(40% 30% at 15% 20%, rgba(236, 58, 140, .14), transparent 70%),
+    radial-gradient(40% 30% at 85% 25%, rgba(122, 75, 220, .16), transparent 70%),
+    repeating-linear-gradient(90deg, #0e0b0b 0 26px, #171212 26px 40px, #0e0b0b 40px 64px),
+    #0e0b0b;
 }
-.stamp {
-  position: absolute; top: 22px; right: 26px; transform: rotate(8deg);
-  border: 3px solid var(--red-ink); color: var(--red-ink); padding: 4px 12px;
-  font-family: var(--display); font-size: 1.1rem; letter-spacing: .1em; text-transform: uppercase;
-  opacity: .8;
+.mt-venue::before { /* haze drifting through the light */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(35% 20% at 30% 40%, rgba(255, 255, 255, .05), transparent 70%),
+              radial-gradient(30% 18% at 70% 30%, rgba(255, 255, 255, .04), transparent 70%);
+  animation: mt-haze 14s ease-in-out infinite alternate;
 }
-.catalog-head {
-  display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; align-items: end;
-  padding: 16px 0; margin-bottom: 30px;
-  border-top: 6px double var(--ink); border-bottom: 6px double var(--ink);
+@keyframes mt-haze { to { transform: translateX(6%); } }
+.mt-sign {
+  position: relative; width: fit-content; margin: 0 auto 34px; text-align: center;
+  font-family: var(--display); font-size: clamp(2.4rem, 7vw, 4.6rem); line-height: 1; text-transform: uppercase;
+  letter-spacing: .04em; color: #fff3d6;
+  text-shadow: 0 0 6px #ff9a3c, 0 0 18px #ff6b1a, 0 0 40px #ec3a8c;
 }
-.catalog-head .top {
-  grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  font-family: var(--mono); font-size: .8rem; letter-spacing: .2em; text-transform: uppercase;
+.mt-sign small {
+  display: block; margin-top: 10px; font-family: var(--mono); font-size: .9rem; letter-spacing: .3em;
+  color: var(--muted); text-shadow: none;
 }
-.catalog-head h1 { margin: 0; color: var(--red-ink); font-size: clamp(2.2rem, 6vw, 4.4rem); }
-.catalog-no {
-  font-family: var(--display); font-size: clamp(1.4rem, 3vw, 2rem); text-transform: uppercase;
-  border: 3px solid var(--ink); padding: 4px 12px; transform: rotate(-3deg); white-space: nowrap;
+.mt-hint { margin: -18px 0 0; text-align: center; font-family: 'Permanent Marker', var(--display); color: #e9d7b0; }
+
+/* The wall: shirts on a rail */
+.mt-wall {
+  position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 34px 26px;
+  padding: 30px 0 54px;
 }
-.catalog-meta {
-  grid-column: 1 / -1; display: flex; gap: 8px 20px; flex-wrap: wrap;
-  font-family: var(--mono); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase;
+.mt-wall::before {
+  content: ""; position: absolute; left: -2%; right: -2%; top: 18px; height: 6px; border-radius: 3px;
+  background: linear-gradient(#9a9a9a, #4a4a4a); box-shadow: 0 3px 6px rgba(0, 0, 0, .6);
 }
-.catalog-meta span::before { content: "\25A0  "; color: var(--red-ink); }
-.parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 22px; }
-.part { display: flex; flex-direction: column; border: 2px solid var(--ink); background: rgba(255, 255, 255, .2); }
-.part-top {
-  display: flex; justify-content: space-between; padding: 6px 10px;
-  font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
-  border-bottom: 2px solid var(--ink);
+.mt-empty { grid-column: 1 / -1; text-align: center; padding: 60px 0 20px; font-family: 'Permanent Marker', var(--display); font-size: 1.4rem; color: #e9d7b0; }
+.mt-shirt {
+  position: relative; display: block; padding: 34px 0 0; background: none; border: 0; cursor: pointer; color: inherit;
+  transform: rotate(var(--tilt)); transform-origin: 50% 0; transition: transform .25s ease;
 }
-.part-img {
-  position: relative; aspect-ratio: 1 / 1; display: grid; place-items: center;
-  background: var(--paper-2); border-bottom: 2px solid var(--ink);
+.mt-shirt:hover, .mt-shirt:focus-visible { transform: rotate(0deg) translateY(4px); }
+.mt-hanger { position: absolute; left: 50%; top: -6px; width: 120px; height: 46px; transform: translateX(-50%); }
+.mt-shirt .shirt { width: 100%; max-width: 230px; margin: 0 auto; filter: drop-shadow(0 18px 18px rgba(0, 0, 0, .6)); }
+.mt-shirt .shirt svg, .mt-shirt .shirt img { display: block; width: 100%; height: auto; }
+.mt-tag {
+  position: absolute; right: 4%; bottom: 26%; padding: 10px 14px 8px; min-width: 92px;
+  background: #c9a26b; color: #1b120b; transform: rotate(var(--tag-tilt));
+  font-family: 'Permanent Marker', var(--display); text-align: center; line-height: 1.05;
+  clip-path: polygon(0 4%, 8% 0, 22% 3%, 40% 0, 63% 4%, 80% 0, 100% 3%, 97% 30%, 100% 62%, 96% 100%, 70% 97%, 45% 100%, 20% 96%, 0 100%, 3% 64%, 0 33%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, .5);
 }
-.part-img svg { width: 80%; height: auto; }
-.part-img img { width: 100%; height: 100%; object-fit: cover; }
-.part-body { display: flex; flex-direction: column; gap: 10px; flex: 1; padding: 14px; }
-.part-name { margin: 0; font-family: var(--display); font-size: 1.55rem; line-height: 1; text-transform: uppercase; }
-.part-desc { margin: 0; font-size: .92rem; color: var(--ink-soft); }
-.spec { font-family: var(--mono); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; }
-.sizes { display: flex; flex-wrap: wrap; gap: 6px; }
-.size {
-  min-width: 40px; height: 32px; padding: 0 6px; cursor: pointer;
-  font-family: var(--mono); font-size: .85rem; font-weight: 700;
-  background: transparent; color: var(--ink); border: 1.5px solid var(--ink);
+.mt-tag::before { /* masking tape */
+  content: ""; position: absolute; left: 50%; top: -10px; width: 46px; height: 18px;
+  transform: translateX(-50%) rotate(-4deg); background: rgba(235, 222, 190, .85);
 }
-.size:hover { background: rgba(29, 22, 17, .1); }
-.size[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.part-foot {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  margin-top: auto; padding-top: 12px; border-top: 1.5px dashed var(--ink);
+.mt-tag b { display: block; font-size: 1.7rem; font-weight: 400; }
+.mt-tag span { font-size: .78rem; letter-spacing: .04em; }
+.mt-name { margin: 10px 0 0; text-align: center; font-family: var(--display); font-size: 1.25rem; text-transform: uppercase; letter-spacing: .04em; }
+
+/* The table: small things on top, black cloth with a banner in front */
+.mt-table { position: relative; margin: 0 -24px; }
+.mt-top {
+  position: relative; z-index: 1; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 22px 34px;
+  padding: 26px 28px 20px; border-radius: 6px 6px 0 0;
+  background: linear-gradient(#2a2420, #15110f); box-shadow: inset 0 2px 0 rgba(255, 255, 255, .06), 0 -2px 14px rgba(0, 0, 0, .4);
 }
-.price { font-family: var(--display); font-size: 1.9rem; color: var(--red-ink); line-height: 1; }
-.part-msg { margin: 0; min-height: 1.2em; font-family: var(--mono); font-size: .78rem; color: var(--red-ink); }
-.catalog-foot {
-  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  margin-top: 30px; padding-top: 12px; border-top: 2px solid var(--ink);
-  font-family: var(--mono); font-size: .8rem;
+.mt-item { text-align: center; }
+.mt-item small { display: block; margin-top: 8px; font-family: 'Permanent Marker', var(--display); font-size: .95rem; color: #e9d7b0; }
+.mt-stack { width: 120px; height: 58px; position: relative; }
+.mt-stack i { position: absolute; left: 0; right: 0; height: 14px; border-radius: 3px; box-shadow: 0 2px 0 rgba(0, 0, 0, .4); }
+.mt-stack i:nth-child(1) { bottom: 0; background: #161616; }
+.mt-stack i:nth-child(2) { bottom: 14px; background: #4b2a86; left: 4px; right: -3px; }
+.mt-stack i:nth-child(3) { bottom: 28px; background: #efe2c2; left: -3px; right: 5px; }
+.mt-stack i:nth-child(4) { bottom: 42px; background: #b8301c; left: 2px; right: 2px; }
+.mt-stickers { width: 110px; height: 58px; position: relative; }
+.mt-stickers img {
+  position: absolute; width: 50px; height: 50px; border-radius: 50%; background: #0d0a09; padding: 6px;
+  border: 3px solid #fff; box-shadow: 0 4px 6px rgba(0, 0, 0, .5);
 }
+.mt-stickers img:nth-child(1) { left: 0; top: 6px; transform: rotate(-12deg); }
+.mt-stickers img:nth-child(2) { left: 30px; top: 0; transform: rotate(8deg); border-color: var(--yellow); }
+.mt-stickers img:nth-child(3) { left: 58px; top: 8px; transform: rotate(20deg); border-color: var(--pink); }
+.mt-lighters { display: flex; gap: 6px; align-items: flex-end; height: 58px; }
+.mt-lighters i { width: 18px; height: 48px; border-radius: 4px 4px 3px 3px; box-shadow: inset -4px 0 0 rgba(0, 0, 0, .25), 0 3px 4px rgba(0, 0, 0, .5); }
+.mt-lighters i::before { content: ""; display: block; height: 10px; border-radius: 3px 3px 0 0; background: linear-gradient(#ddd, #888); }
+.mt-cash {
+  padding: 10px 14px; background: #c9a26b; color: #1b120b; transform: rotate(3deg); text-align: center;
+  font-family: 'Permanent Marker', var(--display); font-size: 1.05rem; line-height: 1.15; box-shadow: 0 6px 10px rgba(0, 0, 0, .5);
+}
+.mt-cloth {
+  position: relative; height: 150px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .035) 0 3px, transparent 3px 34px, rgba(0, 0, 0, .25) 34px 40px, transparent 40px 70px),
+    linear-gradient(#0b0909, #050404);
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 94% 100%, 86% 94%, 76% 100%, 64% 95%, 52% 100%, 40% 94%, 28% 100%, 16% 95%, 6% 100%, 0 93%);
+}
+.mt-banner {
+  position: absolute; left: 50%; top: 18px; transform: translateX(-50%) rotate(-1deg);
+  padding: 14px 34px 12px; background: #efe2c2; color: #1d1611;
+  font-family: var(--display); font-size: clamp(1.6rem, 4.2vw, 2.6rem); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
+  box-shadow: 0 8px 14px rgba(0, 0, 0, .6);
+}
+.mt-banner::before, .mt-banner::after {
+  content: ""; position: absolute; top: 8px; width: 10px; height: 10px; border-radius: 50%;
+  background: #777; box-shadow: inset 0 0 0 3px #333;
+}
+.mt-banner::before { left: 10px; }
+.mt-banner::after { right: 10px; }
+.mt-banner em { font-style: normal; color: var(--red-ink); }
+.mt-ship { text-align: center; padding: 18px 0 8px; margin: 0; font-family: var(--mono); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mt-fine { text-align: center; padding: 0 0 48px; margin: 0; font-family: var(--mono); font-size: .78rem; color: var(--dim); }
+
+/* Shirt close-up */
+.mt-pop[hidden] { display: none; }
+.mt-pop { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: 20px; background: rgba(0, 0, 0, .72); overflow: auto; }
+.mt-card {
+  position: relative; width: min(720px, 100%); display: grid; grid-template-columns: 1fr 1fr; gap: 26px; padding: 28px;
+  background: #1b1513; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 30px 60px rgba(0, 0, 0, .7);
+}
+.mt-big { background: radial-gradient(70% 70% at 50% 40%, rgba(255, 196, 120, .18), transparent 70%), #0e0b0b; border-radius: 6px; padding: 16px; }
+.mt-big svg, .mt-big img { display: block; width: 100%; height: auto; }
+.mt-card h2 { margin: 0 0 6px; font-size: 2rem; }
+.mt-price { font-family: 'Permanent Marker', var(--display); font-size: 1.8rem; color: var(--yellow); }
+.mt-card p { color: var(--muted); }
+.mt-sizes { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 18px; }
+.mt-sizes button {
+  min-width: 46px; height: 40px; background: none; border: 1px solid var(--line); border-radius: 4px; cursor: pointer;
+  color: var(--text); font-family: var(--mono); font-weight: 700;
+}
+.mt-sizes button:hover { border-color: var(--orange); }
+.mt-sizes button[aria-pressed="true"] { border-color: var(--orange); background: var(--orange); color: var(--ink); }
+.mt-label { margin: 14px 0 0; font-family: var(--mono); font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+.mt-msg { margin: 10px 0 0; min-height: 1.2em; font-family: var(--mono); font-size: .85rem; color: var(--pink); }
+.mt-close { position: absolute; right: 12px; top: 10px; background: none; border: 0; color: var(--muted); font-size: 1.8rem; line-height: 1; cursor: pointer; }
+.mt-close:hover { color: var(--text); }
+
+@media (max-width: 700px) {
+  .mt-venue { padding-top: 64px; }
+  .mt-wall { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: 4px; }
+  .mt-wall::before { left: 0; right: 0; }
+  .mt-shirt { scroll-snap-align: center; }
+  .mt-table { margin: 0 -16px; }
+  .mt-card { grid-template-columns: 1fr; padding: 22px; }
+  .mt-cloth { height: 110px; }
+}
+@media (prefers-reduced-motion: reduce) { .mt-venue::before { animation: none; } .mt-shirt { transition: none; } }
 
 /* ---------- Cart drawer (order form) ---------- */
 .drawer-overlay {
@@ -811,9 +890,6 @@ textarea { min-height: 140px; resize: vertical; }
   .footer-grid { grid-template-columns: 1fr; }
   .event { grid-template-columns: 80px 1fr; gap: 16px; }
   .event-date .d { font-size: 2.3rem; }
-  .catalog-head { grid-template-columns: 1fr; }
-  .catalog-no { justify-self: start; }
-  .stamp { position: static; display: inline-block; margin-bottom: 12px; }
   .hours-row { grid-template-columns: 1fr 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .admin-item { grid-template-columns: 56px 1fr; }
@@ -904,26 +980,6 @@ body::after {
 .gallery > * {
   border-style: solid; border-color: transparent; border-width: 14px 8px; border-radius: 0;
   border-image: url(../img/frames/filmstrip.svg) 14 8 round;
-}
-
-/* ---------- Merch: catalog sheet with hex-nut border, aged paper, coffee ring ---------- */
-.catalog {
-  border: clamp(24px, 3.4vw, 40px) solid transparent; border-radius: 0;
-  border-image: url(../img/frames/catalog-frame.svg) 40 / 1 stretch;
-  background-color: var(--paper);
-  background-image:
-    url(../img/textures/stain.svg),
-    radial-gradient(circle at 15% 8%, rgba(255, 255, 255, .45), transparent 40%),
-    radial-gradient(circle at 92% 85%, rgba(120, 80, 30, .16), transparent 50%),
-    url(../img/textures/paper.svg);
-  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
-  background-position: right 4% bottom 3%, 0 0, 0 0, 0 0;
-  background-size: 220px 220px, auto, auto, 320px 320px;
-}
-.part {
-  border: 10px solid transparent;
-  border-image: url(../img/frames/part-frame.svg) 12 / 10px stretch;
-  background: rgba(255, 255, 255, .22) padding-box;
 }
 
 /* ---------- Cart drawer: tractor-feed order form ---------- */

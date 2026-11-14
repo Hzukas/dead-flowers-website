@@ -32,7 +32,7 @@ Before switching computers, commit and push your changes. When you sit down at t
 - **21+ age gate** on first visit, remembered afterward: a colorful pop-up over black-and-white dripping paint.
 - **English / Español toggle** in the header. All site text lives in `assets/js/i18n.js`.
 - **Shop Rec / Shop Med** buttons open the I Heart Jane menus. Until the links are added in `assets/js/site-data.js`, they show a "coming soon" popup.
-- **Merch store** styled as a vintage auto parts catalog, with a cart ("order form"), a dispensary discount code field, and a checkout placeholder until a payment processor is set up.
+- **Merch store** styled as a merch table at a show: shirts hang on a rail with cardboard price tags under a spotlight, over a table with a banner. Tapping a shirt opens a close-up to pick a size and add it to the cart ("order form"), which has a dispensary discount code field and a checkout placeholder until a payment processor is set up. The stickers and lighters on the table are decoration until those products exist.
 - **Monthly deals** on the home page, right under the hero. A green starburst shows the month, and each deal has a headline and optional fine print in English and Spanish. The section hides itself when there are no deals.
 - **Admin demo** (`admin.html`) where Robbie can change hours, post a holiday notice, update the monthly deals, and add, edit, hide, or remove merch, with plain-language instructions. In the mockup, changes are saved only in the browser being used.
 
@@ -54,12 +54,11 @@ All decorative artwork is plain SVG, so it can be opened and edited in Illustrat
 | File | Used for |
 | --- | --- |
 | `assets/img/frames/pinstripe-*.svg` | Hot rod pinstripe corners on cards, tiles, FAQ, and popups (one file per color) |
-| `assets/img/frames/catalog-frame.svg` | Hex-nut border around the merch catalog sheet |
-| `assets/img/frames/part-frame.svg` | Frame around each merch item |
+| `assets/img/frames/catalog-frame.svg`, `part-frame.svg` | Not used since the merch page became a merch table (kept for now) |
 | `assets/img/frames/filmstrip.svg` | 35mm film frames around About page photos |
 | `assets/img/textures/grain.svg` | Film grain over the whole site |
-| `assets/img/textures/paper.svg` | Aged paper on the catalog and order form |
-| `assets/img/textures/stain.svg` | Coffee ring on the catalog |
+| `assets/img/textures/paper.svg` | Aged paper on the order form and event ticket stubs |
+| `assets/img/textures/stain.svg` | Not used since the merch page became a merch table (kept for now) |
 | `assets/img/textures/sunburst.svg` | Rays behind page headers, the exclusives band, and the age gate |
 | `assets/img/textures/wave-stripes.svg` | Wavy 70s stripe dividers |
 | `assets/img/textures/checker.svg` | Checkered flag strip above the footer |
@@ -75,7 +74,7 @@ The transparent logo already floats in the hero. The background behind it is sti
 
 ## Paint glops on the merch page
 
-`assets/js/page-drips.js` hangs a few big glops of psychedelic paint just under the header, along the page edges. Each glop swells, stretches, lets go, and falls down the screen while a new one builds. It's turned on per page with `data-page-drips` on `<body>`; `data-drips-frame=".catalog"` puts a glop over each side of the catalog frame. Load it after `paint.js` and `site.js`. To add it to another page, add those attributes and the script tag. Where the glops hang, how big they get, and how long they take to fall are set in `layout()` in the script.
+`assets/js/page-drips.js` hangs a few big glops of psychedelic paint just under the header, along the page edges. Each glop swells, stretches, lets go, and falls down the screen while a new one builds. It's turned on per page with `data-page-drips` on `<body>`; `data-drips-frame=".mt-venue .wrap"` puts a glop at each side of the merch table area. Load it after `paint.js` and `site.js`. To add it to another page, add those attributes and the script tag. Where the glops hang, how big they get, and how long they take to fall are set in `layout()` in the script.
 
 ## Shared paint (`assets/js/paint.js`)
 
@@ -99,10 +98,11 @@ The site gives the full logo a thin cream outline in CSS (`.hero-float`, `.age-l
 - Events (samples)
 - Merch items, prices, and photos
 - A map on the Contact page
+- Photos for page banners, backgrounds, and buttons: see `IMAGE-LIST.md`
 
 ## Not built yet (needs decisions)
 
-- Merch checkout. Stripe, Shopify Payments, and Square all prohibit dispensaries, so they are out. Leading option: a Fourthwall store (its policy allows cannabis-imagery apparel; confirm with support@fourthwall.com that a dispensary can own the store). Fallback: a high-risk merchant account (PaymentCloud, PayKings, Easy Pay Direct).
+- Merch checkout. The merch store will be owned by a separate LLC, not the Dead Flowers dispensary LLC. Stripe, Shopify Payments, and Square prohibit dispensaries "and related businesses", and the shirts carry the dispensary's name and link back to its site, so apply openly and get approval in writing before building on any of them. Leading option: a Fourthwall store under the merch LLC (its policy allows cannabis-imagery apparel). Fallback: a high-risk merchant account (PaymentCloud, PayKings, Easy Pay Direct).
 - Merch ships to the US and Canada only.
 - Merch discount codes: earned by spending money at the dispensary, redeemed on merch. Still to decide: how codes are issued and how much they take off.
 - A real admin login and storage, so Robbie's edits reach every visitor

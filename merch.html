@@ -5,45 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Merch | Dead Flowers Dispensary</title>
-  <meta name="description" content="Dead Flowers Speed &amp; Supply: shirts and gear from Palmer Lake, Colorado. Ships to the US and Canada.">
+  <meta name="description" content="Dead Flowers merch: shirts and gear from Palmer Lake, Colorado. Ships to the US and Canada.">
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Permanent+Marker&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body data-title-key="title.merch" data-page-drips data-drips-frame=".catalog">
+<body data-title-key="title.merch" data-page-drips data-drips-frame=".mt-venue .wrap">
   <div id="site-header"></div>
 
   <main id="main">
-    <section class="section" style="padding-top:clamp(32px,5vw,64px)">
+    <!-- The merch table. Shirts on the wall come from the merch list (admin.html).
+         The small things on the table are decoration until those products exist. -->
+    <section class="mt-venue">
       <div class="wrap">
-        <div class="catalog">
-          <div class="stamp" data-i18n="merch.stamp"></div>
-          <header class="catalog-head">
-            <div class="top">
-              <span data-i18n="merch.catalogTop"></span>
-              <span>Palmer Lake, Colo.</span>
-            </div>
-            <h1 data-i18n="merch.catalogTitle"></h1>
-            <div class="catalog-no" data-i18n="merch.catalogNo"></div>
-            <div class="catalog-meta">
-              <span data-i18n="merch.shipping"></span>
-              <span data-i18n="merch.inHouse"></span>
-              <span data-i18n="merch.final"></span>
-            </div>
-          </header>
+        <h1 class="mt-sign"><span data-i18n="merch.title"></span><small data-i18n="merch.subtitle"></small></h1>
+        <p class="mt-hint" data-i18n="merch.hint"></p>
 
-          <div class="parts-grid" data-merch-grid></div>
+        <div class="mt-wall" data-merch-wall></div>
 
-          <footer class="catalog-foot">
-            <span data-i18n="merch.footnote"></span>
-            <span>Form DF-77 &middot; Rev. 2026</span>
-          </footer>
+        <div class="mt-table" aria-hidden="true">
+          <div class="mt-top">
+            <div class="mt-item"><div class="mt-stack"><i></i><i></i><i></i><i></i></div><small data-i18n="merch.tableTees"></small></div>
+            <div class="mt-item"><div class="mt-stickers">
+              <img src="assets/img/logo-mark.png" alt=""><img src="assets/img/logo-mark.png" alt=""><img src="assets/img/logo-mark.png" alt="">
+            </div><small data-i18n="merch.tableStickers"></small></div>
+            <div class="mt-item"><div class="mt-lighters">
+              <i style="background:#ec3a8c"></i><i style="background:#ffc31f"></i><i style="background:#46c246"></i><i style="background:#7a4bdc"></i>
+            </div><small data-i18n="merch.tableLighters"></small></div>
+            <div class="mt-cash"><span data-i18n="merch.cashSign"></span><br><span data-i18n="merch.codeSign"></span></div>
+          </div>
+          <div class="mt-cloth"><div class="mt-banner">Dead <em>Flowers</em></div></div>
         </div>
+        <p class="mt-ship"><span data-i18n="merch.shipping"></span> &middot; <span data-i18n="merch.inHouse"></span> &middot; <span data-i18n="merch.final"></span></p>
+        <p class="mt-fine" data-i18n="merch.footnote"></p>
       </div>
     </section>
   </main>
+
+  <!-- Shirt close-up, opened by tapping a shirt on the wall. -->
+  <div class="mt-pop" data-merch-pop hidden>
+    <div class="mt-card" role="dialog" aria-modal="true" aria-labelledby="mt-pop-name">
+      <button class="mt-close" type="button" data-merch-close data-i18n-aria="modal.close">&times;</button>
+      <div class="mt-big" data-pop-img></div>
+      <div>
+        <h2 id="mt-pop-name" data-pop-name></h2>
+        <div class="mt-price" data-pop-price></div>
+        <p data-pop-desc></p>
+        <p class="mt-label" data-i18n="merch.sizes"></p>
+        <div class="mt-sizes" role="group" data-pop-sizes></div>
+        <button class="btn btn-primary" type="button" data-pop-add data-i18n="merch.add"></button>
+        <p class="mt-msg" data-pop-msg role="status"></p>
+      </div>
+    </div>
+  </div>
 
   <div id="site-footer"></div>
 

@@ -166,6 +166,18 @@ p { margin: 0 0 1em; }
   display: block; margin-top: 5px;
   font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; color: var(--muted);
 }
+/* Today's hours, in a slim strip across the top of the header. */
+.header-hours { background: #000; border-bottom: 1px solid var(--line); text-align: center; }
+.header-hours a {
+  display: inline-flex; align-items: center; gap: 10px; padding: 6px 0;
+  font-family: var(--mono); font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+}
+.header-hours a:hover .header-hours-time { color: var(--yellow); }
+.header-hours-status::before {
+  content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%;
+  background: currentColor; box-shadow: 0 0 8px currentColor; vertical-align: 1px;
+}
 .site-nav { display: flex; align-items: center; gap: 22px; margin-left: auto; }
 .nav-right { display: flex; align-items: center; gap: 22px; }
 .nav-links { display: flex; gap: 22px; }

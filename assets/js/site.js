@@ -159,6 +159,11 @@
       '<a class="skip-link" href="#main" data-i18n="a11y.skip"></a>' +
       '<div class="holiday-banner" data-holiday hidden></div>' +
       '<header class="site-header">' +
+        // Today's hours, filled in by renderHours() like the rest of the site.
+        '<div class="header-hours"><div class="wrap">' +
+          '<a href="contact.html"><span class="header-hours-status" data-hours-status></span>' +
+          '<span class="header-hours-time" data-hours-today></span></a>' +
+        '</div></div>' +
         '<div class="wrap header-inner">' +
           // Pages with data-no-header-logo on <body> (the home page, which has the big logo) skip it.
           (document.body.hasAttribute('data-no-header-logo') ? '' :

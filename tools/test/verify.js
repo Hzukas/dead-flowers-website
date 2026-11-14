@@ -109,6 +109,8 @@ console.log('\n[home]');
   ok(!doc.querySelector('.modal-overlay'), 'popup closes');
   click(win, doc.querySelector('.site-header [data-lang-toggle]'));
   ok(doc.querySelector('.nav-links a[href="merch.html"]').textContent === 'Mercancía' && doc.documentElement.lang === 'es', 'language toggle switches the nav to Spanish');
+  const hh = doc.querySelector('.header-hours');
+  ok(!!hh && /\d/.test(hh.textContent) && /today|hoy/i.test(hh.textContent), 'header shows today\'s hours: ' + (hh && hh.textContent));
   ok(!doc.querySelector('.header-logo'), 'home page has no header logo (the hero has the big one)');
   const about = await load('about.html', { df_age_ok: true });
   ok(!!about.doc.querySelector('.site-header .header-logo img'), 'other pages show the centered header logo');

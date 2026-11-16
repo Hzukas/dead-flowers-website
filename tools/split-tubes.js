@@ -36,6 +36,8 @@ const MIN_COL_INK = 3;   // pixels per column before the column counts as occupi
 const MERGE_GAP = 6;     // columns of gap to bridge inside one tube (reflections, thin spots)
 const MIN_WIDTH = 20;    // ignore specks narrower than this
 const PAD = 0.04;        // padding around each crop, as a fraction of crop size
+const MAX_H = 1200;      // crops taller than this are scaled down for the web
+const hex = c => '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
 
 (async () => {
   const img = await loadImage(file);
@@ -55,7 +57,12 @@ const PAD = 0.04;        // padding around each crop, as a fraction of crop size
       }
     }
     const med = k => samples.map(s => s[k]).sort((a, b) => a - b)[samples.length >> 1];
-    return [med(0), med(1), med(2)];
+    const color = [med(0), med(1), med(2)];
+    // How many corner pixels sit close to that color? Real backgrounds are uniform;
+    // tube caps or artwork in the corners are not.
+    const agree = samples.filter(s => Math.max(...s.map((v, k) => Math.abs(v - color[k]))) <= 24).length / samples.length;
+    color.uniform = agree > 0.9;
+    return color;
   }
   let bg = cornerColor();
   const dist = i => Math.max(Math.abs(px[i] - bg[0]), Math.abs(px[i + 1] - bg[1]), Math.abs(px[i + 2] - bg[2]));
@@ -83,7 +90,7 @@ const PAD = 0.04;        // padding around each crop, as a fraction of crop size
     W = nW; H = nH; px = sub.data;
     const nbg = cornerColor();
     const changed = Math.max(...nbg.map((v, k) => Math.abs(v - bg[k]))) > DIST_FG;
-    if (!changed) { ({ W, H, px, bg } = saved); break; }
+    if (!changed || !nbg.uniform) { ({ W, H, px, bg } = saved); break; }
     cv = createCanvas(W, H); ctx = cv.getContext('2d'); ctx.putImageData(sub, 0, 0);
     bg = nbg;
     console.log(`peeled outer margin to ${W}x${H}; inner background rgb(${nbg.join(',')})`);
@@ -165,8 +172,14 @@ const PAD = 0.04;        // padding around each crop, as a fraction of crop size
       id.data[di + 3] = (TRANSPARENT && outside[sy * W + sx]) ? Math.round((dist(si) / DIST_FG) * 255) : 255;
     }
     octx.putImageData(id, 0, 0);
+    let final = out;
+    if (ch > MAX_H) {
+      const s = MAX_H / ch;
+      final = createCanvas(Math.round(cw * s), MAX_H);
+      final.getContext('2d').drawImage(out, 0, 0, final.width, final.height);
+    }
     const outFile = path.join(outDir, `${base}-${n + 1}.png`);
-    fs.writeFileSync(outFile, out.toBuffer('image/png'));
-    console.log(`tube ${n + 1}: x ${cx0}-${cx1}, y ${cy0}-${cy1} (${cw}x${ch}) -> ${path.relative(process.cwd(), outFile)}`);
+    fs.writeFileSync(outFile, final.toBuffer('image/png'));
+    console.log(`tube ${n + 1}: x ${cx0}-${cx1}, y ${cy0}-${cy1} -> ${path.relative(process.cwd(), outFile)} (${final.width}x${final.height}, bg ${hex(bg)})`);
   });
 })().catch(e => { console.error(e); process.exit(1); });

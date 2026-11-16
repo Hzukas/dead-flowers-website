@@ -91,13 +91,12 @@ The hero at the top of `index.html` is a placeholder. The comment above it expla
 
 ## Exclusive pre-roll showcase (`joint-program/`)
 
-A standalone one-page module pitching the store-exclusive joint two-packs (2 x 0.7g and 2 x 1g in a doob tube). It does not depend on the rest of the site, so the folder can be copied anywhere or embedded in an iframe. Open `joint-program/index.html` directly.
+A standalone one-pager pitching the store-exclusive joint two-packs (2 x 0.7g and 2 x 1g in a doob tube). The tube carousel sits in the center of the page with the pitch on the left and the reasons plus contact button on the right; on phones it stacks. It does not depend on the rest of the site, so the folder can be copied anywhere or embedded in an iframe. Open `joint-program/index.html` directly.
 
 To add tube images:
 
 1. Put the image files in `joint-program/labels/`.
-2. List them in `joint-program/labels.js`. Only `src` is required; `name`, `store`, and `type` (Sativa / Indica / Hybrid) show as the caption.
-3. Delete the three `placeholder-*.svg` entries and files once real art is in.
+2. List them in `joint-program/labels.js`. Only `src` is required; `name`, `store`, and `type` (Sativa / Indica / Hybrid) show as the caption, and `bg` sets the slide's backdrop to match the photo.
 
 To cut a lineup photo of several tubes into one PNG per tube:
 

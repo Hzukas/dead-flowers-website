@@ -81,18 +81,18 @@
       display: grid; grid-template-columns: 1fr minmax(250px, 320px) 1fr;
       gap: clamp(24px, 3.5vw, 56px); align-items: center; padding: 16px 0 18px;
     }
-    .col-left { justify-self: end; max-width: 400px; width: 100%; }
+    .col-left { justify-self: end; max-width: 460px; width: 100%; }
     .col-right { justify-self: start; max-width: 420px; width: 100%; }
 
-    /* Why exclusive */
-    .why { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
-    .why li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; }
+    /* Why exclusive: the main point of the sheet, so it reads large. */
+    .why { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
+    .why li { display: grid; grid-template-columns: 46px 1fr; gap: 16px; align-items: start; }
     .why .n {
-      width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center;
-      background: var(--c, var(--grad)); color: #140a1f; font-family: var(--display); font-size: .85rem;
+      width: 46px; height: 46px; border-radius: 11px; display: grid; place-items: center;
+      background: var(--c, var(--grad)); color: #140a1f; font-family: var(--display); font-size: 1.05rem;
     }
-    .why strong { display: block; font-size: 1.08rem; line-height: 1.25; margin-bottom: 3px; }
-    .why p { margin: 0; color: var(--muted); font-size: .95rem; }
+    .why strong { display: block; font-size: clamp(1.25rem, 1.5vw, 1.45rem); line-height: 1.2; margin-bottom: 5px; }
+    .why p { margin: 0; color: var(--muted); font-size: 1.08rem; line-height: 1.45; }
     .types { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
     .types span {
       font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase;

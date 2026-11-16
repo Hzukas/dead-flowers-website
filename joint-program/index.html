@@ -96,14 +96,8 @@
       padding: 22px 0 18px;
     }
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .brand-mark {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: conic-gradient(from 90deg, #ff3d3d, #ff8a1f, #ffc31f, #46c246, #2fa4ff, #8a5cf6, #ff3d3d);
-      position: relative; flex: none;
-    }
-    .brand-mark::after {
-      content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--bg);
-    }
+    .brand-mark { width: 44px; height: 44px; flex: none; }
+    .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
     .brand-name { font-family: var(--display); font-size: 1.05rem; line-height: 1; text-transform: uppercase; }
     .brand-name small { display: block; font-family: var(--mono); font-size: .62rem; letter-spacing: .22em; color: var(--muted); margin-top: 5px; }
     .top-tag { font-family: var(--mono); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
@@ -142,10 +136,11 @@
       pointer-events: none;
     }
     .stage {
-      position: relative; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;
+      position: relative; aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden;
+      /* Black, so product shots photographed on black blend straight into the stage. */
       background:
-        radial-gradient(60% 50% at 50% 55%, rgba(255,255,255,.06), transparent 70%),
-        var(--bg-2);
+        radial-gradient(60% 50% at 50% 55%, rgba(255,255,255,.05), transparent 70%),
+        #000;
       display: grid; place-items: center;
     }
     .slide {
@@ -320,7 +315,7 @@
   <header class="wrap">
     <div class="top">
       <a class="brand" href="#top">
-        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-mark"><img src="logo.png" alt="" width="44" height="44"></span>
         <span class="brand-name">Clarity Gardens<small>Wholesale Partner Program</small></span>
       </a>
       <span class="top-tag">Exclusive Pre-Roll Program</span>

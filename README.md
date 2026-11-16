@@ -93,10 +93,18 @@ The hero at the top of `index.html` is a placeholder. The comment above it expla
 
 A standalone one-page module pitching the store-exclusive joint two-packs (2 x 0.7g and 2 x 1g in a doob tube). It does not depend on the rest of the site, so the folder can be copied anywhere or embedded in an iframe. Open `joint-program/index.html` directly.
 
-To add tube label images:
+To add tube images:
 
 1. Put the image files in `joint-program/labels/`.
 2. List them in `joint-program/labels.js`. Only `src` is required; `name`, `store`, and `type` (Sativa / Indica / Hybrid) show as the caption.
 3. Delete the three `placeholder-*.svg` entries and files once real art is in.
+
+To cut a lineup photo of several tubes into one PNG per tube:
+
+```bash
+node tools/split-tubes.js "C:\path\to\photo.jpg" 8
+```
+
+The number is how many tubes are in the photo. It writes `photo-1.png`, `photo-2.png`, ... into `joint-program/labels/`. The script finds each tube by looking for gaps of background between them, so it works best when the tubes don't overlap. Crops keep the photo's background; the carousel stage is black so shots on black blend in. Add `--transparent` to knock the background out instead, which only works when the tubes contrast with it. The Clarity logo in the header is `joint-program/logo.png`, the same file the Clarity apps use.
 
 The carousel cycles every few seconds, pauses on hover, and supports arrow keys, dots, and swipe.

@@ -79,10 +79,21 @@
     /* Three columns: why | tubes | pricing */
     main .wrap {
       display: grid; grid-template-columns: 1fr minmax(250px, 320px) 1fr;
-      gap: clamp(24px, 3.5vw, 56px); align-items: center; padding: 16px 0 18px;
+      gap: clamp(24px, 3.5vw, 56px); align-items: stretch; padding: 16px 0 18px;
     }
     .col-left { justify-self: end; max-width: 460px; width: 100%; }
-    .col-right { justify-self: start; max-width: 420px; width: 100%; }
+    .col-right { justify-self: start; max-width: 460px; width: 100%; }
+    .col-center { align-self: center; }
+
+    /* Side panels: one light box each, matched in height to the carousel row. */
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.045));
+      border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 26px 26px 24px;
+      display: flex; flex-direction: column; justify-content: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    .panel .sku, .panel .blend { background: rgba(0,0,0,.28); border-color: rgba(255,255,255,.08); }
+    .panel .margin { background: rgba(255,255,255,.05); }
 
     /* Why exclusive: the main point of the sheet, so it reads large. */
     .why { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
@@ -138,6 +149,58 @@
       font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
     }
     .price-foot button:hover { border-color: var(--pink); color: var(--text); }
+    .money input[readonly] { background: rgba(255,255,255,.04); color: var(--text); cursor: default; }
+    .money input[readonly]:focus { outline: none; border-color: var(--line); }
+
+    /* Flower / trim blend slider */
+    .blend {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px 10px; margin-bottom: 12px;
+    }
+    .blend-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+    .blend-head label { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+    .blend-head output { font-family: var(--display); font-size: 1rem; white-space: nowrap; }
+    .blend-head output small { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; color: var(--muted); margin-left: 6px; }
+    .blend input[type="range"] {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 999px; margin: 8px 0 6px; cursor: pointer;
+      background: linear-gradient(90deg, #a9865a 0%, #c9a46c 35%, var(--green) 100%); outline: none;
+    }
+    .blend input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--text);
+      border: 3px solid var(--pink); box-shadow: 0 2px 10px rgba(0,0,0,.5);
+    }
+    .blend input[type="range"]::-moz-range-thumb {
+      width: 16px; height: 16px; border-radius: 50%; background: var(--text); border: 3px solid var(--pink); box-shadow: 0 2px 10px rgba(0,0,0,.5);
+    }
+    .blend input[type="range"]:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--pink); outline-offset: 2px; }
+    .blend-ends { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+
+    /* Gear + settings dialog */
+    .gear {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--muted);
+      cursor: pointer; display: grid; place-items: center; flex: none;
+    }
+    .gear:hover { color: var(--text); border-color: var(--pink); }
+    .gear svg { width: 18px; height: 18px; }
+    .top-right { display: flex; align-items: center; gap: 14px; }
+    dialog.settings {
+      border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--text);
+      padding: 22px 22px 18px; width: min(420px, calc(100vw - 32px)); box-shadow: 0 30px 80px rgba(0,0,0,.6);
+    }
+    dialog.settings::backdrop { background: rgba(5, 3, 12, .7); }
+    dialog.settings h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 1.1rem; margin: 0 0 4px; }
+    dialog.settings .hint { color: var(--muted); font-size: .9rem; margin-bottom: 16px; }
+    .cfg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px 10px; align-items: center; }
+    .cfg-grid .h { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+    .cfg-grid .sku-name { font-weight: 700; font-size: .95rem; }
+    .cfg-grid .money input { padding-top: 8px; padding-bottom: 8px; }
+    .dlg-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 18px; }
+    .dlg-actions .right { display: flex; gap: 8px; }
+    .dlg-btn {
+      border-radius: 999px; padding: 8px 16px; cursor: pointer; font-weight: 600; border: 1px solid var(--line); background: var(--panel-2); color: var(--text);
+    }
+    .dlg-btn.primary { background: var(--grad); color: #140a1f; border-color: transparent; }
+    .dlg-btn.link { background: none; border-color: transparent; color: var(--dim); padding-inline: 4px; font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; }
+    .dlg-btn.link:hover { color: var(--text); }
 
     /* Center: tube carousel */
     .showcase {
@@ -213,7 +276,15 @@
         <img src="logo.png" alt="" width="44" height="44">
         <span class="brand-name">Clarity Gardens<small>Wholesale Partner Program</small></span>
       </a>
-      <span class="top-tag">Exclusive Pre-Roll Program</span>
+      <div class="top-right">
+        <span class="top-tag">Exclusive Pre-Roll Program</span>
+        <button class="gear" id="open-settings" type="button" aria-label="Pricing settings" title="Pricing settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06A2 2 0 1 1 7.07 4.14l.06.06A1.7 1.7 0 0 0 9 4.54h.09A1.7 1.7 0 0 0 10 3V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.36 9v.09A1.7 1.7 0 0 0 20.9 10H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="rainbow-rule" aria-hidden="true"></div>
   </header>
@@ -228,7 +299,7 @@
     <div class="wrap">
 
       <!-- Left: why exclusive wins -->
-      <section class="col-left" aria-labelledby="h-why">
+      <section class="col-left panel" aria-labelledby="h-why">
         <h2 id="h-why">Why exclusive wins</h2>
         <ul class="why">
           <li style="--c: linear-gradient(135deg, var(--orange), #ffc31f)">
@@ -274,8 +345,17 @@
       </section>
 
       <!-- Right: the two SKUs and pricing -->
-      <section class="col-right" aria-labelledby="h-price">
+      <section class="col-right panel" aria-labelledby="h-price">
         <h2 id="h-price">Two SKUs. Your price.</h2>
+
+        <div class="blend">
+          <div class="blend-head">
+            <label for="blend">What's in the joint</label>
+            <output id="blend-out" for="blend">100% flower</output>
+          </div>
+          <input id="blend" type="range" min="0" max="100" step="5" value="100" aria-label="Percent flower in the joint">
+          <div class="blend-ends"><span>100% trim / shake</span><span>100% flower</span></div>
+        </div>
 
         <div class="sku" data-sku="a" style="--c: var(--orange)">
           <div class="sku-head">
@@ -285,7 +365,7 @@
           <div class="rows">
             <div class="field">
               <label for="a-wh">Wholesale / tube</label>
-              <div class="money"><input id="a-wh" data-k="wh" type="number" inputmode="decimal" step="0.01" min="0" value="4.00"></div>
+              <div class="money"><input id="a-wh" data-k="wh" type="text" readonly value="4.00" aria-live="polite" title="Set by the blend slider; change the endpoints with the gear at top right"></div>
             </div>
             <div class="field">
               <label for="a-otd">Out the door</label>
@@ -306,7 +386,7 @@
           <div class="rows">
             <div class="field">
               <label for="b-wh">Wholesale / tube</label>
-              <div class="money"><input id="b-wh" data-k="wh" type="number" inputmode="decimal" step="0.01" min="0" value="6.00"></div>
+              <div class="money"><input id="b-wh" data-k="wh" type="text" readonly value="6.00" aria-live="polite" title="Set by the blend slider; change the endpoints with the gear at top right"></div>
             </div>
             <div class="field">
               <label for="b-otd">Out the door</label>
@@ -320,10 +400,33 @@
         </div>
 
         <div class="price-foot">
-          <span>Margin = (out the door &minus; wholesale) &divide; out the door. Edits save on this device.</span>
+          <span>Wholesale follows the blend. Margin = (out the door &minus; wholesale) &divide; out the door. Edits save on this device.</span>
           <button type="button" id="reset-prices">Reset</button>
         </div>
       </section>
+
+      <dialog class="settings" id="settings" aria-labelledby="settings-title">
+        <form method="dialog" id="settings-form">
+          <h3 id="settings-title">Default pricing</h3>
+          <p class="hint">Wholesale per tube at each end of the blend slider. In between is a straight line.</p>
+          <div class="cfg-grid">
+            <span class="h"></span><span class="h">100% flower</span><span class="h">100% trim</span>
+            <span class="sku-name">2 &times; 0.7g</span>
+            <div class="money"><input id="cfg-a-flower" type="number" inputmode="decimal" step="0.01" min="0" required></div>
+            <div class="money"><input id="cfg-a-trim" type="number" inputmode="decimal" step="0.01" min="0" required></div>
+            <span class="sku-name">2 &times; 1g</span>
+            <div class="money"><input id="cfg-b-flower" type="number" inputmode="decimal" step="0.01" min="0" required></div>
+            <div class="money"><input id="cfg-b-trim" type="number" inputmode="decimal" step="0.01" min="0" required></div>
+          </div>
+          <div class="dlg-actions">
+            <button type="button" class="dlg-btn link" id="cfg-defaults">Restore built-in</button>
+            <span class="right">
+              <button type="button" class="dlg-btn" id="cfg-cancel">Cancel</button>
+              <button type="submit" class="dlg-btn primary" id="cfg-save">Save</button>
+            </span>
+          </div>
+        </form>
+      </dialog>
 
     </div>
   </main>
@@ -468,50 +571,116 @@
       start();
     })();
 
-    /* ---------------- Pricing: editable wholesale + out-the-door, live gross margin ---------------- */
+    /* ---------------- Pricing: blend slider sets wholesale, out-the-door is typed, margin is live ---------------- */
     (function () {
-      var KEY = 'cg-joint-pricing';
-      var DEFAULTS = { a: { wh: '4.00', otd: '' }, b: { wh: '6.00', otd: '' } };
-      var skus = Array.prototype.slice.call(document.querySelectorAll('.sku[data-sku]'));
+      var KEY = 'cg-joint-pricing-v2';
+      // Built-in endpoints: wholesale per tube at 100% flower and at 100% trim/shake.
+      var BUILT_IN = { a: { flower: 4.00, trim: 2.00 }, b: { flower: 6.00, trim: 3.00 } };
+      var state = { cfg: copy(BUILT_IN), blend: 100, otd: { a: '', b: '' } };
 
+      var skus = Array.prototype.slice.call(document.querySelectorAll('.sku[data-sku]'));
+      var slider = document.getElementById('blend');
+      var blendOut = document.getElementById('blend-out');
+      var dlg = document.getElementById('settings');
+      var cfgInputs = {
+        a: { flower: document.getElementById('cfg-a-flower'), trim: document.getElementById('cfg-a-trim') },
+        b: { flower: document.getElementById('cfg-b-flower'), trim: document.getElementById('cfg-b-trim') }
+      };
+
+      function copy(o) { return JSON.parse(JSON.stringify(o)); }
       function money(n) { return '$' + n.toFixed(2); }
-      function calc(sku) {
-        var wh = parseFloat(sku.querySelector('[data-k="wh"]').value);
-        var otd = parseFloat(sku.querySelector('[data-k="otd"]').value);
-        var box = sku.querySelector('[data-margin]');
-        var pct = box.querySelector('.pct'), usd = box.querySelector('.usd');
-        if (!(otd > 0) || !(wh >= 0)) {
-          box.className = 'margin empty'; pct.textContent = 'Enter OTD'; usd.textContent = ''; return;
-        }
-        var m = otd - wh, p = m / otd * 100;
-        box.className = 'margin' + (m > 0 ? ' good' : '');
-        pct.textContent = (p < 0 ? '−' : '') + Math.abs(p).toFixed(0) + '%';
-        usd.textContent = (m < 0 ? '−' : '') + money(Math.abs(m)) + ' / tube';
+      function num(v, fallback) { var n = parseFloat(v); return isFinite(n) && n >= 0 ? n : fallback; }
+
+      // Wholesale per tube for a SKU at the current blend: straight line between the trim and flower prices.
+      function wholesale(id) {
+        var c = state.cfg[id], f = state.blend / 100;
+        return c.trim + (c.flower - c.trim) * f;
       }
-      function load() {
-        var saved = {};
-        try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+
+      function render() {
+        slider.value = state.blend;
+        var trimPct = 100 - state.blend;
+        blendOut.innerHTML = state.blend + '% flower<small>' + trimPct + '% trim</small>';
         skus.forEach(function (sku) {
-          var id = sku.dataset.sku, v = saved[id] || DEFAULTS[id];
-          sku.querySelector('[data-k="wh"]').value = v.wh;
-          sku.querySelector('[data-k="otd"]').value = v.otd;
-          calc(sku);
+          var id = sku.dataset.sku;
+          var wh = wholesale(id);
+          sku.querySelector('[data-k="wh"]').value = wh.toFixed(2);
+          var otdEl = sku.querySelector('[data-k="otd"]');
+          if (otdEl.value !== state.otd[id]) otdEl.value = state.otd[id];
+          var otd = parseFloat(otdEl.value);
+          var box = sku.querySelector('[data-margin]');
+          var pct = box.querySelector('.pct'), usd = box.querySelector('.usd');
+          if (!(otd > 0)) {
+            box.className = 'margin empty'; pct.textContent = 'Enter OTD'; usd.textContent = ''; return;
+          }
+          var m = otd - wh, p = m / otd * 100;
+          box.className = 'margin' + (m > 0 ? ' good' : '');
+          pct.textContent = (p < 0 ? '−' : '') + Math.abs(p).toFixed(0) + '%';
+          usd.textContent = (m < 0 ? '−' : '') + money(Math.abs(m)) + ' / tube';
         });
+      }
+
+      function load() {
+        var saved = null;
+        try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+        if (saved && typeof saved === 'object') {
+          ['a', 'b'].forEach(function (id) {
+            if (saved.cfg && saved.cfg[id]) {
+              state.cfg[id].flower = num(saved.cfg[id].flower, BUILT_IN[id].flower);
+              state.cfg[id].trim = num(saved.cfg[id].trim, BUILT_IN[id].trim);
+            }
+            if (saved.otd && typeof saved.otd[id] === 'string') state.otd[id] = saved.otd[id];
+          });
+          var b = parseInt(saved.blend, 10);
+          if (b >= 0 && b <= 100) state.blend = b;
+        }
+        render();
       }
       function save() {
-        var out = {};
-        skus.forEach(function (sku) {
-          out[sku.dataset.sku] = { wh: sku.querySelector('[data-k="wh"]').value, otd: sku.querySelector('[data-k="otd"]').value };
-        });
-        try { localStorage.setItem(KEY, JSON.stringify(out)); } catch (e) {}
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
       }
+
+      slider.addEventListener('input', function () {
+        state.blend = parseInt(slider.value, 10) || 0;
+        render(); save();
+      });
       skus.forEach(function (sku) {
-        sku.addEventListener('input', function () { calc(sku); save(); });
+        sku.querySelector('[data-k="otd"]').addEventListener('input', function (e) {
+          state.otd[sku.dataset.sku] = e.target.value;
+          render(); save();
+        });
       });
+
+      // Reset: back to 100% flower, clear out-the-door prices. Keeps the gear's price endpoints.
       document.getElementById('reset-prices').addEventListener('click', function () {
-        try { localStorage.removeItem(KEY); } catch (e) {}
-        load();
+        state.blend = 100; state.otd = { a: '', b: '' };
+        render(); save();
       });
+
+      // Gear: edit the flower / trim endpoints.
+      function fillDialog(cfg) {
+        ['a', 'b'].forEach(function (id) {
+          cfgInputs[id].flower.value = cfg[id].flower.toFixed(2);
+          cfgInputs[id].trim.value = cfg[id].trim.toFixed(2);
+        });
+      }
+      document.getElementById('open-settings').addEventListener('click', function () {
+        fillDialog(state.cfg);
+        if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+      });
+      function closeDlg() { if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open'); }
+      document.getElementById('cfg-cancel').addEventListener('click', closeDlg);
+      document.getElementById('cfg-defaults').addEventListener('click', function () { fillDialog(BUILT_IN); });
+      document.getElementById('settings-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        ['a', 'b'].forEach(function (id) {
+          state.cfg[id].flower = num(cfgInputs[id].flower.value, state.cfg[id].flower);
+          state.cfg[id].trim = num(cfgInputs[id].trim.value, state.cfg[id].trim);
+        });
+        render(); save();
+        closeDlg();
+      });
+
       load();
     })();
   </script>

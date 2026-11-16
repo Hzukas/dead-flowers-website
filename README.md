@@ -93,7 +93,7 @@ The hero at the top of `index.html` is a placeholder. The comment above it expla
 
 A standalone one-page sell sheet for the store-exclusive joint two-packs (2 x 0.7g and 2 x 1g in a doob tube). The title runs across the top, the three "why exclusive" points sit on the left, the tube carousel is in the center (tubes slide out to the left and in from the right), and the pricing panel is on the right; on phones it stacks. It does not depend on the rest of the site, so the folder can be copied anywhere or embedded in an iframe. Open `joint-program/index.html` directly.
 
-The pricing panel is editable while presenting: wholesale per tube (defaults $4.00 and $6.00) and the store's out-the-door price. Gross margin is computed as (out the door - wholesale) / out the door. Edits are remembered in that browser; the Reset button restores the defaults. To change the defaults, edit `DEFAULTS` near the bottom of `joint-program/index.html`.
+The pricing panel is live while presenting. A blend slider sets what's in the joint, from 100% flower down to 100% trim/shake, and wholesale per tube follows it on a straight line between the two endpoint prices: $4.00 flower / $2.00 trim for the 2 x 0.7g, and $6.00 flower / $3.00 trim for the 2 x 1g. Type the store's out-the-door price and gross margin shows as (out the door - wholesale) / out the door. The gear at the top right opens a panel to change the four endpoint prices. Slider, out-the-door prices, and endpoints are remembered in that browser; Reset puts the slider back to 100% flower and clears the out-the-door prices but keeps the endpoints. The built-in endpoints live in `BUILT_IN` near the bottom of `joint-program/index.html`.
 
 To add tube images:
 

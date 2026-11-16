@@ -306,7 +306,7 @@
           <div class="rows">
             <div class="field">
               <label for="b-wh">Wholesale / tube</label>
-              <div class="money"><input id="b-wh" data-k="wh" type="number" inputmode="decimal" step="0.01" min="0" value="5.50"></div>
+              <div class="money"><input id="b-wh" data-k="wh" type="number" inputmode="decimal" step="0.01" min="0" value="6.00"></div>
             </div>
             <div class="field">
               <label for="b-otd">Out the door</label>
@@ -471,7 +471,7 @@
     /* ---------------- Pricing: editable wholesale + out-the-door, live gross margin ---------------- */
     (function () {
       var KEY = 'cg-joint-pricing';
-      var DEFAULTS = { a: { wh: '4.00', otd: '' }, b: { wh: '5.50', otd: '' } };
+      var DEFAULTS = { a: { wh: '4.00', otd: '' }, b: { wh: '6.00', otd: '' } };
       var skus = Array.prototype.slice.call(document.querySelectorAll('.sku[data-sku]'));
 
       function money(n) { return '$' + n.toFixed(2); }

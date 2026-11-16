@@ -56,6 +56,7 @@
     $$('[data-i18n]', root).forEach(function (el) { el.textContent = DF.t(el.getAttribute('data-i18n')); });
     $$('[data-i18n-placeholder]', root).forEach(function (el) { el.placeholder = DF.t(el.getAttribute('data-i18n-placeholder')); });
     $$('[data-i18n-aria]', root).forEach(function (el) { el.setAttribute('aria-label', DF.t(el.getAttribute('data-i18n-aria'))); });
+    $$('[data-i18n-alt]', root).forEach(function (el) { el.alt = DF.t(el.getAttribute('data-i18n-alt')); });
     document.documentElement.lang = DF.lang;
     var titleKey = document.body.getAttribute('data-title-key');
     if (titleKey) document.title = DF.t(titleKey);
@@ -125,8 +126,8 @@
               '<rect x="74" y="111" width="52" height="3" fill="#b8301c"/>';
         break;
       case 'logo':
-        art = '<circle cx="100" cy="110" r="27" fill="#ffffff" stroke="#ff6b1a" stroke-width="3"/>' +
-              '<image href="assets/img/logo.png" x="76" y="86" width="48" height="48"/>';
+        art = '<circle cx="100" cy="110" r="27" fill="#0d0a09" stroke="#ff6b1a" stroke-width="3"/>' +
+              '<image href="assets/img/logo-mark.png" x="80" y="90" width="40" height="40"/>';
         break;
       case 'flames':
         art = '<path d="M52 184 L52 160 Q60 150 64 136 Q70 154 78 150 Q82 132 92 124 Q94 146 104 146 Q110 130 120 128 Q118 148 128 150 Q136 138 148 140 L148 184 Z" fill="#ff6b1a"/>' +
@@ -149,7 +150,7 @@
   /* ---------- Shared layout ---------- */
   function brandHTML() {
     return '<a class="brand" href="index.html" aria-label="Dead Flowers Dispensary">' +
-      '<span class="badge"><img src="assets/img/logo.png" alt=""></span>' +
+      '<span class="badge"><img src="assets/img/logo-mark.png" alt=""></span>' +
       '<span class="wordmark">Dead Flowers<small data-i18n="brand.tagline"></small></span></a>';
   }
 
@@ -158,7 +159,17 @@
       '<a class="skip-link" href="#main" data-i18n="a11y.skip"></a>' +
       '<div class="holiday-banner" data-holiday hidden></div>' +
       '<header class="site-header">' +
-        '<div class="wrap header-inner">' + brandHTML() +
+        // Today's hours, filled in by renderHours() like the rest of the site.
+        '<div class="header-hours"><div class="wrap">' +
+          '<a href="contact.html"><span class="header-hours-status" data-hours-status></span>' +
+          '<span class="header-hours-time" data-hours-today></span></a>' +
+        '</div></div>' +
+        '<div class="wrap header-inner">' +
+          // Pages with data-no-header-logo on <body> (the home page, which has the big logo) skip it.
+          (document.body.hasAttribute('data-no-header-logo') ? '' :
+          '<a class="header-logo" href="index.html" aria-label="Dead Flowers Dispensary">' +
+            '<picture><source srcset="assets/img/logo-full.webp" type="image/webp">' +
+            '<img src="assets/img/logo-full.png" alt="Dead Flowers Dispensary" width="720" height="851"></picture></a>') +
           '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">' +
             '<span></span><span></span><span></span><span class="sr" data-i18n="nav.menu"></span></button>' +
           '<nav class="site-nav" id="site-nav" aria-label="Main">' +
@@ -169,14 +180,16 @@
               '<a href="faq.html" data-i18n="nav.faq"></a>' +
               '<a href="contact.html" data-i18n="nav.contact"></a>' +
             '</div>' +
-            '<div class="nav-shop">' +
-              '<a class="btn btn-primary btn-sm" href="#" data-jane="rec" data-i18n="nav.shopRec"></a>' +
-              '<a class="btn btn-green btn-sm" href="#" data-jane="med" data-i18n="nav.shopMed"></a>' +
-            '</div>' +
-            '<div class="nav-tools">' +
-              '<button class="icon-btn" type="button" data-lang-toggle></button>' +
-              '<button class="icon-btn" type="button" data-cart-open><span data-i18n="nav.cart"></span>' +
-                '<span class="cart-count" data-cart-count>0</span></button>' +
+            '<div class="nav-right">' +
+              '<div class="nav-shop">' +
+                '<a class="btn btn-primary btn-sm" href="#" data-jane="rec" data-i18n="nav.shopRec"></a>' +
+                '<a class="btn btn-green btn-sm" href="#" data-jane="med" data-i18n="nav.shopMed"></a>' +
+              '</div>' +
+              '<div class="nav-tools">' +
+                '<button class="icon-btn" type="button" data-lang-toggle></button>' +
+                '<button class="icon-btn" type="button" data-cart-open><span data-i18n="nav.cart"></span>' +
+                  '<span class="cart-count" data-cart-count>0</span></button>' +
+              '</div>' +
             '</div>' +
           '</nav>' +
         '</div>' +
@@ -223,11 +236,9 @@
   function ageGateHTML() {
     return '' +
       '<div class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title" data-age-gate>' +
-        '<div class="age-card">' +
-          '<span class="badge badge-lg"><img src="assets/img/logo.png" alt="Dead Flowers Dispensary"></span>' +
+        '<div class="age-card"><div class="age-card-inner">' +
           '<div data-age-ask>' +
-            '<h1 id="age-title" data-i18n="age.title"></h1>' +
-            '<p class="q" data-i18n="age.question"></p>' +
+            '<h1 id="age-title" data-i18n="age.question"></h1>' +
             '<div class="age-actions">' +
               '<button class="btn btn-primary" type="button" data-age-yes data-i18n="age.yes"></button>' +
               '<button class="btn btn-outline" type="button" data-age-no data-i18n="age.no"></button>' +
@@ -235,8 +246,8 @@
           '</div>' +
           '<div data-age-denied hidden><h1 data-i18n="age.deniedTitle"></h1><p class="q" data-i18n="age.denied"></p></div>' +
           '<p class="fine" data-i18n="age.note"></p>' +
-          '<button class="icon-btn" type="button" data-lang-toggle style="margin-top:18px"></button>' +
-        '</div>' +
+          '<button class="age-lang" type="button" data-lang-toggle></button>' +
+        '</div></div>' +
       '</div>';
   }
 
@@ -265,12 +276,16 @@
 
   function renderContactInfo() {
     $$('[data-address]').forEach(function (el) { el.textContent = DF.addressText(); });
-    $$('[data-phone]').forEach(function (el) { el.textContent = SITE.phone; });
-    $$('[data-email]').forEach(function (el) { el.textContent = SITE.email; });
+    $$('[data-phone]').forEach(function (el) {
+      el.innerHTML = '<a href="tel:+1' + esc(SITE.phone.replace(/\D/g, '')) + '">' + esc(SITE.phone) + '</a>';
+    });
+    $$('[data-email]').forEach(function (el) {
+      el.innerHTML = '<a href="mailto:' + esc(SITE.email) + '">' + esc(SITE.email) + '</a>';
+    });
     $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
     $$('[data-directions]').forEach(function (el) {
       el.href = 'https://www.google.com/maps/search/?api=1&query=' +
-        encodeURIComponent('Dead Flowers Dispensary ' + SITE.address.city + ' ' + SITE.address.state);
+        encodeURIComponent('Dead Flowers Dispensary, ' + DF.addressText());
     });
     $$('[data-social]').forEach(function (el) {
       var url = SITE.links[el.getAttribute('data-social')];
@@ -298,6 +313,27 @@
           (isToday ? ' &middot; ' + esc(DF.t('contact.today')) : '') + '</td><td>' + esc(DF.hoursText(find(d))) + '</td></tr>';
       }).join('');
     });
+  }
+
+  DF.getDeals = function () { return DF.store.get('df_deals', null) || SITE.deals || { month: 1, items: [] }; };
+  DF.monthName = function (month, style) {
+    return cap(new Date(2024, (Number(month) || 1) - 1, 15).toLocaleDateString(DF.locale(), { month: style || 'long' }));
+  };
+
+  function renderDeals() {
+    var section = document.querySelector('[data-deals]');
+    if (!section) return;
+    var deals = DF.getDeals();
+    var items = (deals.items || []).filter(function (d) { return DF.pick(d.title); });
+    section.hidden = !items.length;
+    if (!items.length) return;
+    var month = DF.monthName(deals.month);
+    section.querySelector('[data-deals-title]').textContent = DF.t('deals.title').replace('{month}', month);
+    section.querySelector('[data-deals-month-short]').textContent = DF.monthName(deals.month, 'short').replace('.', '');
+    section.querySelector('[data-deals-list]').innerHTML = items.map(function (d) {
+      var detail = DF.pick(d.detail);
+      return '<li><strong>' + esc(DF.pick(d.title)) + '</strong>' + (detail ? '<span>' + esc(detail) + '</span>' : '') + '</li>';
+    }).join('');
   }
 
   function renderEvents() {
@@ -474,9 +510,13 @@
 
   /* ---------- Age gate (21+) ---------- */
   function ageGate() {
-    if (document.body.hasAttribute('data-no-gate') || DF.store.get('df_age_ok', false)) return;
+    // Add ?gate to any page address to see the gate again, even after answering Yes.
+    var forced = /[?&]gate(=|&|$)/.test(location.search);
+    if (document.body.hasAttribute('data-no-gate') || (DF.store.get('df_age_ok', false) && !forced)) return;
     document.body.insertAdjacentHTML('beforeend', ageGateHTML());
     var gate = document.querySelector('[data-age-gate]');
+    // The black-and-white melting paint behind the pop-up comes from hero-melt.js,
+    // which finds [data-age-gate] by itself when it loads.
     DF.applyI18n(gate);
     renderLangToggle();
     document.body.classList.add('locked');
@@ -487,6 +527,7 @@
         DF.store.set('df_age_ok', true);
         gate.remove();
         document.body.classList.remove('locked');
+        document.dispatchEvent(new CustomEvent('df:age-ok'));
       } else if (e.target.closest('[data-age-no]')) {
         gate.querySelector('[data-age-ask]').hidden = true;
         gate.querySelector('[data-age-denied]').hidden = false;
@@ -565,6 +606,7 @@
     renderHoliday();
     renderContactInfo();
     renderHours();
+    renderDeals();
     renderEvents();
     renderCart();
     DF.renderHooks.forEach(function (fn) { fn(); });
@@ -579,8 +621,18 @@
 
     markActiveNav();
     bindGlobal();
+    watchScroll();
     DF.render();
     ageGate();
+  }
+
+  // Shrinks the hanging header logo into the bar once the page scrolls.
+  function watchScroll() {
+    var header = document.querySelector('.site-header');
+    if (!header) return;
+    var update = function () { header.classList.toggle('scrolled', window.scrollY > 40); };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
   }
 
   document.addEventListener('DOMContentLoaded', init);

@@ -1,21 +1,20 @@
 /* ==========================================================================
    Store info. Edit the values below; every page reads from here.
-   Anything in [brackets] is a placeholder to replace with real info.
-   Hours and the holiday notice can also be changed from admin.html.
+   Hours, the holiday notice, and monthly deals can also be changed from admin.html.
    ========================================================================== */
 window.DF_SITE = {
   address: {
-    street: '[Street address]',
+    street: '855 Highway 105',
     city: 'Palmer Lake',
     state: 'CO',
     zip: '80133'
   },
-  phone: '[(719) 000-0000]',
-  email: '[info@yourdomain.com]',
+  phone: '719-488-9900',
+  email: 'info@deadflowersmj.com',
 
-  // day: 0 = Sunday ... 6 = Saturday. Times are 24-hour "HH:MM". (Sample hours.)
+  // day: 0 = Sunday ... 6 = Saturday. Times are 24-hour "HH:MM".
   hours: [
-    { day: 0, open: '10:00', close: '19:00', closed: false },
+    { day: 0, open: '09:00', close: '21:00', closed: false },
     { day: 1, open: '09:00', close: '21:00', closed: false },
     { day: 2, open: '09:00', close: '21:00', closed: false },
     { day: 3, open: '09:00', close: '21:00', closed: false },
@@ -27,12 +26,25 @@ window.DF_SITE = {
   // Shows as a yellow bar at the top of every page when not empty.
   holidayNotice: '',
 
+  // Monthly deals on the home page. month: 1 = January ... 12 = December.
+  // Each deal has a headline and optional fine print, in English and Spanish.
+  // If the list is empty, the deals section is hidden.
+  deals: {
+    month: 11,
+    items: [
+      {
+        title: { en: 'Buy 2 Wana, get 1 free', es: 'Compra 2 Wana y llévate 1 gratis' },
+        detail: { en: '', es: '' }
+      }
+    ]
+  },
+
   links: {
     // I Heart Jane menu links. Leave empty to show the "coming soon" popup.
     janeRec: '',
     janeMed: '',
-    facebook: '',
-    instagram: ''
+    facebook: 'https://www.facebook.com/profile.php?id=100093026703869',
+    instagram: 'https://www.instagram.com/deadflowersmj/'
   },
 
   // Sample events for the preview. Past dates are hidden automatically.

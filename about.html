@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
   <title>About | Dead Flowers Dispensary</title>
   <meta name="description" content="The story behind Dead Flowers Dispensary in Palmer Lake, Colorado.">
-  <link rel="icon" href="assets/img/logo.png">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,6 +25,14 @@
     </section>
 
     <section class="section">
+      <div class="wrap story">
+        <p class="story-lead" data-i18n="about.story1"></p>
+        <p data-i18n="about.story2"></p>
+        <p data-i18n="about.story3"></p>
+      </div>
+    </section>
+
+    <section class="section section-tight">
       <div class="wrap">
         <div class="pillars">
           <div class="pillar" style="--c: var(--orange)">
@@ -48,14 +57,11 @@
           <span class="kicker" data-i18n="about.galleryKicker"></span>
           <h2 data-i18n="about.galleryTitle"></h2>
         </div>
-        <!-- Swap each .ph box for a store photo: <img src="assets/img/store-1.jpg" alt="..."> -->
+        <!-- Store photos live in assets/img/store. The first one shows large. -->
         <div class="gallery">
-          <div class="ph" data-i18n="about.photo"></div>
-          <div class="ph" data-i18n="about.photo"></div>
-          <div class="ph" data-i18n="about.photo"></div>
-          <div class="ph" data-i18n="about.photo"></div>
-          <div class="ph" data-i18n="about.photo"></div>
-          <div class="ph" data-i18n="about.photo"></div>
+          <img src="assets/img/store/murals.jpg" data-i18n-alt="about.photo1" loading="lazy" width="1600" height="1201">
+          <img src="assets/img/store/counter.jpg" data-i18n-alt="about.photo2" loading="lazy" width="1200" height="901">
+          <img src="assets/img/store/records.jpg" data-i18n-alt="about.photo3" loading="lazy" width="1200" height="901">
         </div>
       </div>
     </section>
@@ -82,6 +88,8 @@
   <script src="assets/js/site-data.js"></script>
   <script src="assets/js/merch-data.js"></script>
   <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/paint.js"></script>
   <script src="assets/js/site.js"></script>
+  <script src="assets/js/hero-melt.js"></script>
 </body>
 </html>

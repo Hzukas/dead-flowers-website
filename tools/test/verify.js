@@ -22,7 +22,7 @@ const files = pages.map(p => path.join(ROOT, p)).concat(
   fs.readdirSync(path.join(ROOT, 'assets/js')).map(f => path.join(ROOT, 'assets/js', f)).filter(f => !f.endsWith('i18n.js')));
 for (const f of files) {
   const src = fs.readFileSync(f, 'utf8');
-  for (const m of src.matchAll(/data-(?:i18n(?:-aria|-placeholder)?|title-key)="([^"]+)"/g)) used.add(m[1]);
+  for (const m of src.matchAll(/data-(?:i18n(?:-aria|-placeholder|-alt)?|title-key)="([^"]+)"/g)) used.add(m[1]);
   for (const m of src.matchAll(/'([a-z0-9]+\.[a-zA-Z0-9]+)'/g)) if (namespaces.has(m[1].split('.')[0])) used.add(m[1]);
 }
 const missing = [...used].filter(k => !(k in dict.en));
@@ -43,7 +43,7 @@ ok(bad.length === 0, 'all local href/src targets exist' + (bad.length ? ': ' + b
 
 // ---------- Dynamic: load a page in jsdom ----------
 async function load(page, storage = {}) {
-  let html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+  let html = fs.readFileSync(path.join(ROOT, page.split('?')[0]), 'utf8');   // page may carry ?query
   html = html.replace(/<script src="([^"]+)"><\/script>/g, (_, src) =>
     '<script>' + fs.readFileSync(path.join(ROOT, src), 'utf8').replace(/<\/script>/g, '<\\/script>') + '</script>');
   const errors = [];
@@ -58,6 +58,8 @@ async function load(page, storage = {}) {
     beforeParse(win) {
       for (const [k, v] of Object.entries(storage)) win.localStorage.setItem(k, JSON.stringify(v));
       win.scrollTo = () => {};
+      // jsdom has no WebGL. Report "unavailable" so pages take their no-WebGL fallback.
+      win.HTMLCanvasElement.prototype.getContext = () => null;
       win.Element.prototype.scrollIntoView = function () {};
       win.alert = m => errors.push('alert: ' + m);
       win.confirm = () => true;
@@ -92,6 +94,8 @@ console.log('\n[age gate]');
   ok(!doc.querySelector('[data-age-gate]') && store(win).df_age_ok === true, '"Yes" removes the gate and remembers it');
   const again = await load('index.html', { df_age_ok: true });
   ok(!again.doc.querySelector('[data-age-gate]'), 'gate stays away on the next visit');
+  const forced = await load('about.html?gate', { df_age_ok: true });
+  ok(!!forced.doc.querySelector('[data-age-gate]') && forced.errors.length === 0, '?gate shows the gate again after answering Yes');
   const admin = await load('admin.html');
   ok(!admin.doc.querySelector('[data-age-gate]'), 'admin page has no gate');
 }
@@ -107,6 +111,18 @@ console.log('\n[home]');
   ok(!doc.querySelector('.modal-overlay'), 'popup closes');
   click(win, doc.querySelector('.site-header [data-lang-toggle]'));
   ok(doc.querySelector('.nav-links a[href="merch.html"]').textContent === 'Mercancía' && doc.documentElement.lang === 'es', 'language toggle switches the nav to Spanish');
+  const hh = doc.querySelector('.header-hours');
+  ok(!!hh && /\d/.test(hh.textContent) && /today|hoy/i.test(hh.textContent), 'header shows today\'s hours: ' + (hh && hh.textContent));
+  ok(!doc.querySelector('.header-logo'), 'home page has no header logo (the hero has the big one)');
+  const about = await load('about.html', { df_age_ok: true });
+  ok(!!about.doc.querySelector('.site-header .header-logo img'), 'other pages show the centered header logo');
+  const heroLogo = doc.querySelector('.hero .hero-float');
+  ok(!!heroLogo && !doc.querySelector('.hero').classList.contains('hero-live'), 'without WebGL the hero keeps the plain logo');
+  const deals = doc.querySelector('[data-deals]');
+  ok(!deals.hidden && deals.querySelectorAll('.deals-list li').length === 1 && deals.textContent.includes('Wana'), 'monthly deals show on the home page');
+  ok(deals.querySelector('[data-deals-title]').textContent === 'Ofertas de Noviembre', 'deals title follows the language: ' + deals.querySelector('[data-deals-title]').textContent);
+  const noDeals = await load('index.html', { df_age_ok: true, df_deals: { month: 12, items: [] } });
+  ok(noDeals.doc.querySelector('[data-deals]').hidden, 'deals section hides when there are no deals');
   const held = await load('index.html', { df_age_ok: true, df_holiday: 'Closed Thanksgiving Day.' });
   const banner = held.doc.querySelector('[data-holiday]');
   ok(!banner.hidden && banner.textContent.includes('Thanksgiving'), 'holiday notice shows as a banner when set');
@@ -115,14 +131,20 @@ console.log('\n[home]');
 console.log('\n[merch + cart]');
 {
   const { win, doc } = await load('merch.html', { df_age_ok: true });
-  const parts = doc.querySelectorAll('.part');
-  ok(parts.length === 4, `catalog shows ${parts.length} items`);
-  ok(parts[0].querySelector('svg') !== null, 'placeholder shirt drawing renders');
-  click(win, parts[0].querySelector('[data-add]'));
-  ok(parts[0].querySelector('[data-msg]').textContent.length > 0, 'adding without a size asks for one');
-  click(win, parts[0].querySelector('.size[data-size="L"]'));
-  click(win, parts[0].querySelector('[data-add]'));
-  ok(doc.querySelector('[data-cart-count]').textContent === '1', 'cart count goes to 1');
+  const shirts = doc.querySelectorAll('.mt-shirt');
+  ok(shirts.length === 4, `merch wall hangs ${shirts.length} shirts`);
+  ok(shirts[0].querySelector('.shirt svg') !== null && /\$30/.test(shirts[0].querySelector('.mt-tag').textContent), 'shirt drawing and price tag render');
+  const pop = doc.querySelector('[data-merch-pop]');
+  click(win, shirts[0]);
+  ok(!pop.hidden && pop.querySelector('[data-pop-name]').textContent === 'Racing Stripe Tee', 'tapping a shirt opens its close-up');
+  click(win, pop.querySelector('[data-pop-add]'));
+  ok(!pop.hidden && pop.querySelector('[data-pop-msg]').textContent.length > 0, 'adding without a size asks for one');
+  click(win, pop.querySelector('[data-pop-sizes] [data-size="L"]'));
+  click(win, pop.querySelector('[data-pop-add]'));
+  ok(pop.hidden && doc.querySelector('[data-cart-count]').textContent === '1', 'adding closes the close-up and cart count goes to 1');
+  click(win, shirts[1]);
+  doc.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  ok(pop.hidden, 'Escape closes the close-up');
   click(win, doc.querySelector('[data-cart-open]'));
   ok(doc.querySelector('[data-drawer]').classList.contains('open'), 'cart drawer opens');
   click(win, doc.querySelector('[data-qty="1"]'));
@@ -161,6 +183,21 @@ console.log('\n[admin]');
   const saved = store(win);
   ok(saved.df_hours && saved.df_hours.find(h => h.day === 1).closed === true && saved.df_holiday === 'Closed Christmas Day.', 'saving hours stores Monday closed and the holiday note');
 
+  ok(doc.querySelectorAll('.deal-row').length === 1, 'deals editor shows the current deal');
+  click(win, doc.querySelector('[data-add-deal]'));
+  const rows = doc.querySelectorAll('.deal-row');
+  rows[1].querySelector('[data-f="title_en"]').value = '20% off all pre-rolls';
+  rows[1].querySelector('[data-f="detail_en"]').value = 'Fridays only.';
+  doc.querySelector('[data-deals-month]').value = '12';
+  click(win, doc.querySelector('[data-save-deals]'));
+  const sd = store(win).df_deals;
+  ok(sd && sd.month === 12 && sd.items.length === 2 && sd.items[1].detail.en === 'Fridays only.', 'saving deals stores the month and both deals');
+  click(win, doc.querySelectorAll('[data-remove-deal]')[0]);
+  ok(doc.querySelectorAll('.deal-row').length === 2, 'first Remove click on a deal only asks to confirm');
+  click(win, doc.querySelectorAll('[data-remove-deal]')[0]);
+  click(win, doc.querySelector('[data-save-deals]'));
+  ok(store(win).df_deals.items.length === 1 && store(win).df_deals.items[0].title.en === '20% off all pre-rolls', 'removing a deal and saving keeps the other');
+
   ok(doc.querySelectorAll('.admin-item').length === 4, 'merch list shows 4 items');
   click(win, doc.querySelector('[data-add-item]'));
   const f = doc.querySelector('[data-item-form]');
@@ -191,11 +228,16 @@ console.log('\n[admin]');
   ok(errors.length === 0, 'admin actions raised no errors' + (errors.length ? ': ' + errors.join(' / ') : ''));
 
   const shop = await load('merch.html', Object.assign({ df_age_ok: true }, store(win)));
-  const names = [...shop.doc.querySelectorAll('.part-name')].map(n => n.textContent);
+  const names = [...shop.doc.querySelectorAll('.mt-name')].map(n => n.textContent);
   ok(names.length === 3 && names.includes('Pit Crew Tee') && !names.includes('Hot Rod Flames Tee'), 'store page reflects admin changes: ' + names.join(', '));
-  ok(shop.doc.body.textContent.includes('$35.00'), 'store page shows the edited price');
+  const racing = shop.doc.querySelector('.mt-shirt[data-id="racing-stripe-tee"] .mt-tag');
+  ok(!!racing && racing.textContent.includes('$35'), 'store page shows the edited price on the tag');
+  const pit = shop.doc.querySelector('.mt-shirt[data-id^="pit-crew-tee"] .mt-tag');
+  ok(!!pit && pit.textContent.includes('$27.50'), 'a price with cents keeps them on the tag: ' + (pit && pit.textContent));
   const home = await load('index.html', Object.assign({ df_age_ok: true }, store(win)));
   ok(home.doc.querySelector('[data-holiday]').textContent.includes('Christmas'), 'site shows the holiday note set in admin');
+  const dealText = home.doc.querySelector('[data-deals]').textContent;
+  ok(dealText.includes('December') && dealText.includes('pre-rolls') && !dealText.includes('Wana'), 'home page shows the deals set in admin');
 }
 
 })().then(() => {

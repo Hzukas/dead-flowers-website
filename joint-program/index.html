@@ -85,15 +85,48 @@
     .col-right { justify-self: start; max-width: 460px; width: 100%; }
     .col-center { align-self: center; }
 
-    /* Side panels: one light box each, matched in height to the carousel row. */
+    /* Side panels: one light box each, matched in height to the carousel row.
+       Light surface, so everything inside switches to dark ink. */
     .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.045));
-      border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 26px 26px 24px;
+      --p-bg: #f6f2ea;      /* warm off-white */
+      --p-card: #ffffff;
+      --p-ink: #1b1424;
+      --p-muted: #5b5370;
+      --p-dim: #8a8198;
+      --p-line: #e2dbcf;
+      --p-field: #f1ebe1;
+      background: linear-gradient(180deg, #faf7f1, var(--p-bg));
+      color: var(--p-ink);
+      border: 1px solid rgba(255,255,255,.6); border-radius: 18px; padding: 26px 26px 24px;
       display: flex; flex-direction: column; justify-content: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
     }
-    .panel .sku, .panel .blend { background: rgba(0,0,0,.28); border-color: rgba(255,255,255,.08); }
-    .panel .margin { background: rgba(255,255,255,.05); }
+    .panel h2 { color: var(--p-dim); }
+    .panel .why p { color: var(--p-muted); }
+    .panel .types-label { color: var(--p-dim); }
+    .panel .types span { border-color: var(--p-line); color: var(--p-muted); }
+    .panel .types .sativa { border-color: #e2731a; color: #c45e0b; }
+    .panel .types .indica { border-color: #7a4bdc; color: #6a3fd1; }
+    .panel .types .hybrid { border-color: #3aa63a; color: #2a8f2a; }
+    .panel .sku, .panel .blend { background: var(--p-card); border-color: var(--p-line); }
+    .panel .sku-head .big small, .panel .sku-head .what { color: var(--p-dim); }
+    .panel .field label, .panel .blend-head label, .panel .blend-ends { color: var(--p-dim); }
+    .panel .blend-head output small { color: var(--p-muted); }
+    .panel .money::before { color: var(--p-dim); }
+    .panel .money input {
+      background: var(--p-card); border-color: #d6cfc3; color: var(--p-ink);
+    }
+    .panel .money input::placeholder { color: var(--p-dim); }
+    .panel .money input[readonly] { background: var(--p-field); color: var(--p-ink); }
+    .panel .money input[readonly]:focus { border-color: #d6cfc3; }
+    .panel .margin { background: var(--p-field); border-color: var(--p-line); }
+    .panel .margin.empty .pct { color: var(--p-dim); }
+    .panel .margin.good .pct { color: #1f8f3a; }
+    .panel .price-foot { color: var(--p-dim); }
+    .panel .price-foot button { border-color: #d6cfc3; color: var(--p-muted); }
+    .panel .price-foot button:hover { border-color: var(--pink); color: var(--p-ink); }
+    .panel .blend input[type="range"]::-webkit-slider-thumb { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+    .panel .blend input[type="range"]::-moz-range-thumb { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
 
     /* Why exclusive: the main point of the sheet, so it reads large. */
     .why { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }

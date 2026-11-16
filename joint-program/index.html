@@ -79,14 +79,14 @@
     /* Three columns: why | tubes | pricing */
     main .wrap {
       display: grid; grid-template-columns: 1fr minmax(250px, 320px) 1fr;
-      gap: clamp(24px, 3.5vw, 56px); align-items: stretch; padding: 16px 0 18px;
+      gap: clamp(24px, 3.5vw, 56px); align-items: center; padding: 16px 0 18px;
     }
     .col-left { justify-self: end; max-width: 460px; width: 100%; }
     .col-right { justify-self: start; max-width: 460px; width: 100%; }
-    .col-center { align-self: center; }
 
-    /* Side panels: one light box each, matched in height to the carousel row.
-       Light surface, so everything inside switches to dark ink. */
+    /* Side panels: one light box each, sized to their content and centered beside the
+       tube (a script matches the two heights). Light surface, so everything inside
+       switches to dark ink. */
     .panel {
       --p-bg: #f6f2ea;      /* warm off-white */
       --p-card: #ffffff;
@@ -602,6 +602,24 @@
       capStore.textContent = labels[0].store || ' ';
       if (labels[0].type) { capType.hidden = false; capType.textContent = labels[0].type; capType.dataset.type = String(labels[0].type).toLowerCase(); }
       start();
+    })();
+
+    /* ---------------- Side panels: same height as each other, sized by the taller one's content ---------------- */
+    (function () {
+      var left = document.querySelector('.col-left.panel'), right = document.querySelector('.col-right.panel');
+      if (!left || !right) return;
+      var pending = null;
+      function match() {
+        pending = null;
+        left.style.minHeight = right.style.minHeight = '';
+        if (window.innerWidth <= 980) return; // stacked on small screens
+        var h = Math.max(left.offsetHeight, right.offsetHeight);
+        left.style.minHeight = right.style.minHeight = h + 'px';
+      }
+      function schedule() { if (!pending) pending = requestAnimationFrame(match); }
+      window.addEventListener('resize', schedule);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+      match();
     })();
 
     /* ---------------- Pricing: blend slider sets wholesale, out-the-door is typed, margin is live ---------------- */

@@ -36,7 +36,7 @@
     html { -webkit-text-size-adjust: 100%; }
     body {
       margin: 0; min-height: 100vh;
-      display: grid; grid-template-rows: auto 1fr auto;
+      display: grid; grid-template-rows: auto auto 1fr auto;
       background: var(--bg);
       background-image:
         radial-gradient(800px 500px at 10% 0%, rgba(255, 61, 127, .16), transparent 65%),
@@ -44,84 +44,104 @@
       color: var(--text);
       font-family: var(--body);
       font-size: 16px;
-      line-height: 1.55;
+      line-height: 1.5;
     }
     img { max-width: 100%; display: block; }
-    a { color: inherit; }
-    button { font: inherit; }
+    button, input { font: inherit; }
     p { margin: 0 0 .9em; }
-    .wrap { width: min(1240px, 100% - 40px); margin-inline: auto; }
+    .wrap { width: min(1280px, 100% - 40px); margin-inline: auto; }
 
-    h1, h2 {
-      font-family: var(--display); font-weight: 400; text-transform: uppercase;
-      line-height: 1; letter-spacing: -.01em; margin: 0 0 .4em;
+    h1, h2 { font-weight: 400; margin: 0; }
+    h1 {
+      font-family: var(--display); text-transform: uppercase; line-height: 1; letter-spacing: -.01em;
+      font-size: clamp(1.8rem, 3.6vw, 3.2rem);
     }
-    h1 { font-size: clamp(2rem, 3.6vw, 3.2rem); }
-    h2 { font-size: .8rem; font-family: var(--mono); letter-spacing: .22em; color: var(--dim); margin-bottom: 1.1em; }
+    h2 { font-family: var(--mono); font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
     .grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .kicker {
-      display: inline-block; font-family: var(--mono); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
-      padding: 5px 12px; border-radius: 999px; background: var(--grad); color: #140a1f; font-weight: 700; margin-bottom: 16px;
+      display: inline-block; font-family: var(--mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 999px; background: var(--grad); color: #140a1f; font-weight: 700; margin-bottom: 12px;
     }
-    .lead { color: var(--muted); font-size: 1.05rem; max-width: 40ch; }
 
     /* Header */
-    header .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0 14px; }
-    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    header .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0 12px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
     .brand img { width: 44px; height: 44px; object-fit: contain; }
     .brand-name { font-family: var(--display); font-size: 1rem; line-height: 1; text-transform: uppercase; }
     .brand-name small { display: block; font-family: var(--mono); font-size: .6rem; letter-spacing: .22em; color: var(--muted); margin-top: 5px; }
     .top-tag { font-family: var(--mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
     .rainbow-rule { height: 3px; background: var(--rainbow); border-radius: 2px; }
 
-    /* Three columns: pitch | tubes | reasons */
-    main .wrap {
-      display: grid; grid-template-columns: 1fr minmax(260px, 330px) 1fr;
-      gap: clamp(28px, 4vw, 64px); align-items: center; padding: 28px 0;
-    }
-    .col-left { justify-self: end; max-width: 420px; }
-    .col-right { justify-self: start; max-width: 400px; }
+    /* Title across the top */
+    .title { text-align: center; padding: 22px 0 6px; }
+    .title p { color: var(--muted); margin: 10px auto 0; max-width: 62ch; }
 
-    /* Packs */
-    .packs { display: grid; gap: 10px; margin-top: 22px; }
-    .pack {
-      display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
-      padding: 12px 16px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line);
-      border-left: 4px solid var(--c, var(--pink));
+    /* Three columns: why | tubes | pricing */
+    main .wrap {
+      display: grid; grid-template-columns: 1fr minmax(250px, 320px) 1fr;
+      gap: clamp(24px, 3.5vw, 56px); align-items: center; padding: 16px 0 18px;
     }
-    .pack .big { font-family: var(--display); font-size: 1.5rem; line-height: 1; white-space: nowrap; }
-    .pack .big small { font-family: var(--body); font-weight: 600; font-size: .7rem; color: var(--muted); letter-spacing: .04em; margin-left: 6px; }
-    .pack .what { font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); text-align: right; }
-    .types { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .col-left { justify-self: end; max-width: 400px; width: 100%; }
+    .col-right { justify-self: start; max-width: 420px; width: 100%; }
+
+    /* Why exclusive */
+    .why { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+    .why li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; }
+    .why .n {
+      width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center;
+      background: var(--c, var(--grad)); color: #140a1f; font-family: var(--display); font-size: .85rem;
+    }
+    .why strong { display: block; font-size: 1.08rem; line-height: 1.25; margin-bottom: 3px; }
+    .why p { margin: 0; color: var(--muted); font-size: .95rem; }
+    .types { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
     .types span {
-      font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+      font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase;
       padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted);
     }
     .types .sativa { border-color: var(--orange); color: var(--orange); }
     .types .indica { border-color: var(--purple); color: #b9a2ff; }
     .types .hybrid { border-color: var(--green); color: #8ae08a; }
+    .types-label { font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-top: 22px; }
+    .types-label + .types { margin-top: 8px; }
 
-    /* Reasons */
-    .why { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
-    .why li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
-    .why .n {
-      width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
-      background: var(--c, var(--grad)); color: #140a1f; font-family: var(--display); font-size: .85rem;
+    /* Pricing */
+    .sku {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 14px;
+      border-left: 4px solid var(--c, var(--pink)); margin-bottom: 12px;
     }
-    .why strong { display: block; font-size: 1.02rem; line-height: 1.25; margin-bottom: 2px; }
-    .why p { margin: 0; color: var(--muted); font-size: .95rem; }
-    .note { margin-top: 22px; padding: 12px 16px; border-radius: 10px; border: 1px dashed var(--line); color: var(--muted); font-size: .9rem; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px; margin-top: 20px;
-      padding: 13px 22px; border-radius: 999px; text-decoration: none; font-weight: 600;
-      background: var(--grad); color: #140a1f; box-shadow: 0 10px 30px rgba(255, 61, 127, .25);
-      transition: transform .15s ease;
+    .sku-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .sku-head .big { font-family: var(--display); font-size: 1.35rem; line-height: 1; white-space: nowrap; }
+    .sku-head .big small { font-family: var(--body); font-weight: 600; font-size: .68rem; color: var(--muted); letter-spacing: .04em; margin-left: 6px; }
+    .sku-head .what { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+    .rows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .field label { display: block; font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin-bottom: 4px; white-space: nowrap; }
+    .money { position: relative; }
+    .money::before { content: "$"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--dim); font-weight: 600; pointer-events: none; }
+    .money input {
+      width: 100%; padding: 9px 8px 9px 22px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2);
+      color: var(--text); font-weight: 700; font-size: 1.02rem; -moz-appearance: textfield;
     }
-    .btn:hover { transform: translateY(-1px); }
+    .money input::-webkit-outer-spin-button, .money input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .money input:focus { outline: 2px solid var(--pink); outline-offset: 1px; border-color: transparent; }
+    .money input::placeholder { color: var(--dim); font-weight: 500; }
+    .margin {
+      border-radius: 8px; padding: 7px 10px; background: rgba(255,255,255,.04); border: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: center; min-height: 42px;
+    }
+    .margin .pct { font-family: var(--display); font-size: 1.15rem; line-height: 1; }
+    .margin .usd { font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; color: var(--muted); margin-top: 3px; }
+    .margin.empty .pct { color: var(--dim); font-size: .95rem; font-family: var(--body); font-weight: 600; }
+    .margin.good .pct { color: #8ae08a; }
+    .price-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; color: var(--dim); }
+    .price-foot button {
+      background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 4px 10px; cursor: pointer;
+      font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+    }
+    .price-foot button:hover { border-color: var(--pink); color: var(--text); }
 
     /* Center: tube carousel */
     .showcase {
-      position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px;
+      position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 10px;
       box-shadow: 0 30px 80px rgba(0,0,0,.5);
     }
     .showcase::before {
@@ -129,47 +149,58 @@
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
     }
+    /* Tall enough for the whole tube, short enough that the page still fits one screen. */
     .stage {
-      position: relative; height: clamp(440px, 68vh, 780px); border-radius: 10px; overflow: hidden; background: #000;
+      position: relative; height: clamp(380px, calc(100vh - 340px), 900px);
+      border-radius: 10px; overflow: hidden; background: #000;
     }
     .slide {
-      position: absolute; inset: 0; display: grid; place-items: center; padding: 14px;
-      opacity: 0; transform: scale(.985); transition: opacity .7s ease, transform .9s ease;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 10px;
+      transform: translateX(100%);
+      transition: transform .65s cubic-bezier(.22, .61, .36, 1);
+      will-change: transform;
     }
-    .slide.active { opacity: 1; transform: scale(1); }
-    .slide img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+    .slide.from-left { transform: translateX(-100%); }
+    .slide.leaving { transform: translateX(-100%); }
+    .slide.leaving.to-right { transform: translateX(100%); }
+    .slide.active { transform: translateX(0); }
+    .slide.notrans { transition: none; }
+    /* Full tube, top to bottom: fill the stage height, never crop. */
+    .slide img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
     .stage-empty { color: var(--dim); font-family: var(--mono); font-size: .8rem; letter-spacing: .1em; text-align: center; padding: 20px; margin: 0; }
-    .caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; min-height: 30px; }
+    .caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; min-height: 30px; }
     .caption .name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
-    .caption .store { font-family: var(--mono); font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); display: block; }
+    .caption .store { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); display: block; }
     .type-pill {
-      flex: none; font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase;
+      flex: none; font-family: var(--mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase;
       padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--text);
     }
     .type-pill[data-type="sativa"] { border-color: var(--orange); color: var(--orange); }
     .type-pill[data-type="indica"] { border-color: var(--purple); color: #b9a2ff; }
     .type-pill[data-type="hybrid"] { border-color: var(--green); color: #8ae08a; }
-    .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+    .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
     .dots { display: flex; gap: 6px; flex-wrap: wrap; }
     .dot { width: 7px; height: 7px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--line); transition: transform .2s, background .2s; }
     .dot.active { background: var(--pink); transform: scale(1.45); }
     .arrows { display: flex; gap: 6px; }
     .arrow {
-      width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel-2);
+      width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel-2);
       color: var(--text); cursor: pointer; display: grid; place-items: center;
     }
     .arrow:hover { border-color: var(--pink); }
 
-    footer { padding: 14px 0 22px; color: var(--dim); font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+    footer { padding: 10px 0 18px; color: var(--dim); font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; }
     footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
-    @media (max-width: 960px) {
-      main .wrap { grid-template-columns: 1fr; gap: 32px; padding: 20px 0 32px; }
+    @media (max-width: 980px) {
+      main .wrap { grid-template-columns: 1fr; gap: 28px; padding: 12px 0 28px; }
       .col-left, .col-right { justify-self: stretch; max-width: none; }
       .col-left { order: 1; } .col-center { order: 2; } .col-right { order: 3; }
       .col-center { width: min(340px, 100%); margin-inline: auto; }
-      .stage { height: min(62vh, 620px); }
+      .stage { height: min(70vh, 640px); }
       .top-tag { display: none; }
+      .title { text-align: left; }
+      .title p { margin-left: 0; }
     }
     @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
   </style>
@@ -187,24 +218,33 @@
     <div class="rainbow-rule" aria-hidden="true"></div>
   </header>
 
+  <section class="title wrap">
+    <span class="kicker">Escape the price war</span>
+    <h1>Your store's joint. <span class="grad-text">Nobody else's.</span></h1>
+    <p>Two joints in a doob tube, branded to one dispensary. Customers can't find it anywhere else, so they can't price it anywhere else.</p>
+  </section>
+
   <main>
     <div class="wrap">
 
-      <!-- Left: the pitch and the two packs -->
-      <section class="col-left" aria-labelledby="h1">
-        <span class="kicker">Escape the price war</span>
-        <h1 id="h1">Your store's joint.<br><span class="grad-text">Nobody else's.</span></h1>
-        <p class="lead">Two joints in a doob tube, branded to one dispensary. Customers can't find it anywhere else, so they can't price it anywhere else.</p>
-        <div class="packs">
-          <div class="pack" style="--c: var(--orange)">
-            <span class="big">2 &times; 0.7g <small>per tube</small></span>
-            <span class="what">Two-pack</span>
-          </div>
-          <div class="pack" style="--c: var(--pink)">
-            <span class="big">2 &times; 1g <small>per tube</small></span>
-            <span class="what">Two-pack</span>
-          </div>
-        </div>
+      <!-- Left: why exclusive wins -->
+      <section class="col-left" aria-labelledby="h-why">
+        <h2 id="h-why">Why exclusive wins</h2>
+        <ul class="why">
+          <li style="--c: linear-gradient(135deg, var(--orange), #ffc31f)">
+            <span class="n">01</span>
+            <div><strong>Can't be price-shopped</strong><p>No competitor can match a product they can't stock.</p></div>
+          </li>
+          <li style="--c: linear-gradient(135deg, var(--pink), var(--purple))">
+            <span class="n">02</span>
+            <div><strong>Loyalty to your store, not a brand</strong><p>Brand loyalty travels to whoever sells it cheapest. This stays home.</p></div>
+          </li>
+          <li style="--c: linear-gradient(135deg, #2fa4ff, var(--green))">
+            <span class="n">03</span>
+            <div><strong>A reason to come back</strong><p>One place to get it. Every repeat trip is yours.</p></div>
+          </li>
+        </ul>
+        <div class="types-label">Every tube labeled</div>
         <div class="types" aria-label="Tube labels">
           <span class="sativa">Sativa</span><span class="indica">Indica</span><span class="hybrid">Hybrid</span>
         </div>
@@ -233,25 +273,56 @@
         </div>
       </section>
 
-      <!-- Right: why exclusive, and the ask -->
-      <section class="col-right" aria-labelledby="h2">
-        <h2 id="h2">Why exclusive wins</h2>
-        <ul class="why">
-          <li style="--c: linear-gradient(135deg, var(--orange), #ffc31f)">
-            <span class="n">01</span>
-            <div><strong>Can't be price-shopped</strong><p>No competitor can match a product they can't stock.</p></div>
-          </li>
-          <li style="--c: linear-gradient(135deg, var(--pink), var(--purple))">
-            <span class="n">02</span>
-            <div><strong>Loyalty to your store, not a brand</strong><p>Brand loyalty travels to whoever sells it cheapest. This stays home.</p></div>
-          </li>
-          <li style="--c: linear-gradient(135deg, #2fa4ff, var(--green))">
-            <span class="n">03</span>
-            <div><strong>A reason to come back</strong><p>One place to get it. Every repeat trip is yours.</p></div>
-          </li>
-        </ul>
-        <p class="note">Margins in line with the joints you already carry. The difference is who the customer is loyal to afterward.</p>
-        <a class="btn" href="mailto:harrison@clarity-gardens.com?subject=Exclusive%20Pre-Roll%20Program">Start a conversation &rarr;</a>
+      <!-- Right: the two SKUs and pricing -->
+      <section class="col-right" aria-labelledby="h-price">
+        <h2 id="h-price">Two SKUs. Your price.</h2>
+
+        <div class="sku" data-sku="a" style="--c: var(--orange)">
+          <div class="sku-head">
+            <span class="big">2 &times; 0.7g <small>per tube</small></span>
+            <span class="what">1.4g two-pack</span>
+          </div>
+          <div class="rows">
+            <div class="field">
+              <label for="a-wh">Wholesale / tube</label>
+              <div class="money"><input id="a-wh" data-k="wh" type="number" inputmode="decimal" step="0.01" min="0" value="4.00"></div>
+            </div>
+            <div class="field">
+              <label for="a-otd">Out the door</label>
+              <div class="money"><input id="a-otd" data-k="otd" type="number" inputmode="decimal" step="0.01" min="0" placeholder="11.00"></div>
+            </div>
+            <div class="field">
+              <label>Gross margin</label>
+              <div class="margin empty" data-margin><span class="pct">Enter OTD</span><span class="usd"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sku" data-sku="b" style="--c: var(--pink)">
+          <div class="sku-head">
+            <span class="big">2 &times; 1g <small>per tube</small></span>
+            <span class="what">2g two-pack</span>
+          </div>
+          <div class="rows">
+            <div class="field">
+              <label for="b-wh">Wholesale / tube</label>
+              <div class="money"><input id="b-wh" data-k="wh" type="number" inputmode="decimal" step="0.01" min="0" value="5.50"></div>
+            </div>
+            <div class="field">
+              <label for="b-otd">Out the door</label>
+              <div class="money"><input id="b-otd" data-k="otd" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00"></div>
+            </div>
+            <div class="field">
+              <label>Gross margin</label>
+              <div class="margin empty" data-margin><span class="pct">Enter OTD</span><span class="usd"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-foot">
+          <span>Margin = (out the door &minus; wholesale) &divide; out the door. Edits save on this device.</span>
+          <button type="button" id="reset-prices">Reset</button>
+        </div>
       </section>
 
     </div>
@@ -266,6 +337,7 @@
 
   <script src="labels.js"></script>
   <script>
+    /* ---------------- Tube carousel: conveyor slide, out left / in from right ---------------- */
     (function () {
       var labels = Array.isArray(window.TUBE_LABELS) ? window.TUBE_LABELS.filter(function (l) { return l && l.src; }) : [];
       var stage = document.getElementById('stage');
@@ -276,8 +348,8 @@
       var capType = document.getElementById('cap-type');
       var prevBtn = document.getElementById('prev');
       var nextBtn = document.getElementById('next');
-      var INTERVAL = 3800;
-      var idx = 0, timer = null, slides = [], dotEls = [];
+      var INTERVAL = 4000, DURATION = 700;
+      var idx = 0, timer = null, slides = [], dotEls = [], cleanup = null;
 
       if (!labels.length) {
         empty.hidden = false;
@@ -292,7 +364,6 @@
         var img = document.createElement('img');
         img.src = l.src;
         img.alt = (l.name ? l.name + ' ' : '') + 'tube' + (l.store ? ' for ' + l.store : '');
-        img.loading = i < 2 ? 'eager' : 'lazy';
         img.decoding = 'async';
         slide.appendChild(img);
         stage.appendChild(slide);
@@ -303,14 +374,42 @@
         dot.type = 'button';
         dot.setAttribute('role', 'tab');
         dot.setAttribute('aria-label', 'Show tube ' + (i + 1));
-        dot.addEventListener('click', function () { go(i); restart(); });
+        dot.addEventListener('click', function () { go(i, i < idx ? 'prev' : 'next'); restart(); });
         dots.appendChild(dot);
         dotEls.push(dot);
       });
 
-      function go(n) {
-        idx = (n + labels.length) % labels.length;
-        slides.forEach(function (s, i) { s.classList.toggle('active', i === idx); });
+      function resetSlide(s) {
+        s.classList.add('notrans');
+        s.classList.remove('leaving', 'to-right', 'from-left', 'active');
+        void s.offsetWidth; // apply the parked position without animating
+        s.classList.remove('notrans');
+      }
+
+      // dir: 'next' = current exits left, new enters from right. 'prev' = the reverse.
+      function go(n, dir) {
+        var target = (n + labels.length) % labels.length;
+        if (target === idx && slides[idx].classList.contains('active')) return;
+        dir = dir || 'next';
+        var cur = slides[idx], nxt = slides[target];
+        if (cleanup) cleanup();
+
+        if (dir === 'prev') {
+          nxt.classList.add('notrans', 'from-left');
+          void nxt.offsetWidth;
+          nxt.classList.remove('notrans');
+          cur.classList.add('leaving', 'to-right');
+        } else {
+          cur.classList.add('leaving');
+        }
+        cur.classList.remove('active');
+        nxt.classList.remove('from-left');
+        nxt.classList.add('active');
+
+        var t = setTimeout(function () { resetSlide(cur); cleanup = null; }, DURATION);
+        cleanup = function () { clearTimeout(t); resetSlide(cur); };
+
+        idx = target;
         dotEls.forEach(function (d, i) {
           d.classList.toggle('active', i === idx);
           d.setAttribute('aria-selected', i === idx ? 'true' : 'false');
@@ -326,7 +425,8 @@
           capType.hidden = true;
         }
       }
-      function next() { go(idx + 1); }
+      function next() { go(idx + 1, 'next'); }
+      function prev() { go(idx - 1, 'prev'); }
       function start() {
         if (labels.length < 2) return;
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -335,17 +435,16 @@
       function stop() { if (timer) { clearInterval(timer); timer = null; } }
       function restart() { stop(); start(); }
 
-      prevBtn.addEventListener('click', function () { go(idx - 1); restart(); });
+      prevBtn.addEventListener('click', function () { prev(); restart(); });
       nextBtn.addEventListener('click', function () { next(); restart(); });
       var box = document.getElementById('showcase');
       box.addEventListener('mouseenter', stop);
       box.addEventListener('mouseleave', start);
-      box.addEventListener('focusin', stop);
-      box.addEventListener('focusout', start);
       document.addEventListener('visibilitychange', function () { document.hidden ? stop() : restart(); });
       document.addEventListener('keydown', function (e) {
+        if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
         if (e.key === 'ArrowRight') { next(); restart(); }
-        if (e.key === 'ArrowLeft') { go(idx - 1); restart(); }
+        if (e.key === 'ArrowLeft') { prev(); restart(); }
       });
 
       var x0 = null;
@@ -353,12 +452,67 @@
       stage.addEventListener('touchend', function (e) {
         if (x0 === null) return;
         var dx = e.changedTouches[0].clientX - x0;
-        if (Math.abs(dx) > 40) { dx < 0 ? next() : go(idx - 1); restart(); }
+        if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); restart(); }
         x0 = null;
       });
 
-      go(0);
+      // First slide appears without animating in.
+      slides[0].classList.add('notrans', 'active');
+      void slides[0].offsetWidth;
+      slides[0].classList.remove('notrans');
+      dotEls[0].classList.add('active');
+      dotEls[0].setAttribute('aria-selected', 'true');
+      capName.textContent = labels[0].name || ' ';
+      capStore.textContent = labels[0].store || ' ';
+      if (labels[0].type) { capType.hidden = false; capType.textContent = labels[0].type; capType.dataset.type = String(labels[0].type).toLowerCase(); }
       start();
+    })();
+
+    /* ---------------- Pricing: editable wholesale + out-the-door, live gross margin ---------------- */
+    (function () {
+      var KEY = 'cg-joint-pricing';
+      var DEFAULTS = { a: { wh: '4.00', otd: '' }, b: { wh: '5.50', otd: '' } };
+      var skus = Array.prototype.slice.call(document.querySelectorAll('.sku[data-sku]'));
+
+      function money(n) { return '$' + n.toFixed(2); }
+      function calc(sku) {
+        var wh = parseFloat(sku.querySelector('[data-k="wh"]').value);
+        var otd = parseFloat(sku.querySelector('[data-k="otd"]').value);
+        var box = sku.querySelector('[data-margin]');
+        var pct = box.querySelector('.pct'), usd = box.querySelector('.usd');
+        if (!(otd > 0) || !(wh >= 0)) {
+          box.className = 'margin empty'; pct.textContent = 'Enter OTD'; usd.textContent = ''; return;
+        }
+        var m = otd - wh, p = m / otd * 100;
+        box.className = 'margin' + (m > 0 ? ' good' : '');
+        pct.textContent = (p < 0 ? '−' : '') + Math.abs(p).toFixed(0) + '%';
+        usd.textContent = (m < 0 ? '−' : '') + money(Math.abs(m)) + ' / tube';
+      }
+      function load() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+        skus.forEach(function (sku) {
+          var id = sku.dataset.sku, v = saved[id] || DEFAULTS[id];
+          sku.querySelector('[data-k="wh"]').value = v.wh;
+          sku.querySelector('[data-k="otd"]').value = v.otd;
+          calc(sku);
+        });
+      }
+      function save() {
+        var out = {};
+        skus.forEach(function (sku) {
+          out[sku.dataset.sku] = { wh: sku.querySelector('[data-k="wh"]').value, otd: sku.querySelector('[data-k="otd"]').value };
+        });
+        try { localStorage.setItem(KEY, JSON.stringify(out)); } catch (e) {}
+      }
+      skus.forEach(function (sku) {
+        sku.addEventListener('input', function () { calc(sku); save(); });
+      });
+      document.getElementById('reset-prices').addEventListener('click', function () {
+        try { localStorage.removeItem(KEY); } catch (e) {}
+        load();
+      });
+      load();
     })();
   </script>
 </body>

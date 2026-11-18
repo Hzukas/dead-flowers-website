@@ -9,7 +9,6 @@
     "assets": "node tools/make-assets.js"
   },
   "devDependencies": {
-    "@napi-rs/canvas": "^0.1.65",
     "jsdom": "^24.1.3"
   }
 }
